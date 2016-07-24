@@ -1,3 +1,7 @@
+I fixed the problem with the Random shuffler not actually shuffling, and will post it tonight after I am done doing other stuff: Sunday at 4:00
+- Kyle Erchinger
+
+
 #CLUE GAME
 
 ##Welcome to Clue!
@@ -104,13 +108,3 @@
 		3. If Player's accusation is correct: Player wins
 
 		4. If Player's accusation is correct: Player loses
-
-
-
-
-
-
-
-
-
-
