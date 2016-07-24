@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		49886BA91D3A9FB500E237C4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49886BA81D3A9FB500E237C4 /* main.cpp */; };
+		FDC4C21A1D44AB85002DE813 /* kelsey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDC4C2191D44AB85002DE813 /* kelsey.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		49886BA51D3A9FB500E237C4 /* Clue-Game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Clue-Game"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49886BA81D3A9FB500E237C4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		FDC4C2191D44AB85002DE813 /* kelsey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kelsey.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				49886BA81D3A9FB500E237C4 /* main.cpp */,
+				FDC4C2191D44AB85002DE813 /* kelsey.cpp */,
 			);
 			path = "Clue-Game";
 			sourceTree = "<group>";
@@ -118,6 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDC4C21A1D44AB85002DE813 /* kelsey.cpp in Sources */,
 				49886BA91D3A9FB500E237C4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +243,7 @@
 				49886BAE1D3A9FB500E237C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
