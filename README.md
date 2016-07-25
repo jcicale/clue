@@ -1,8 +1,4 @@
-Sunday at 4:00: 
-I fixed the problem with the Random shuffler not actually shuffling, and will post it tonight after I am done doing other stuff: 
-
-Sunday at 6:10:
-Also, I am working on the Accusation and Suggestion class, also looking at the code, Kelsey Kind of already wrote my part, so thanks Kelsey! I also want to try and make a Scratch Pad, like in the game, to help the player make suggestions and what not. 
+So I added the work I did today, onto the source area, please read my commits and stuff. I sorta need some help in some areas/ and I didn;t Finnish, but Im still working on it
  
 - Kyle Erchinger
 
