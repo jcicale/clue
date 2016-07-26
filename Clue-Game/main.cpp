@@ -1,3 +1,4 @@
+
 //
 //  main.cpp
 //  Clue-Game
@@ -10,6 +11,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+# include <ctime>
+#include <cstdlib>
+#include <random>
 
 using namespace std;
 
@@ -223,7 +227,7 @@ string getLocationTypeString(LocationType type) {
         case DiningRoom:
             return "Dining Room";
     }
-}
+};
 
 class Card {
 public:
@@ -257,6 +261,7 @@ public:
     }
 };
 
+
 vector<Card*> confidential;
 
 class Envelope{
@@ -279,16 +284,18 @@ public:
 };
 
 vector<Card*> cards;
+
 class WeaponDeck {
 public:
-    
     vector<Card*> weaponCards;
     WeaponDeck() {
         for(int i = 0; i<NUM_WEAPONS; i++){
             WeaponCard* card = new WeaponCard((WeaponType)i);
             weaponCards.push_back(card);
         }
-        random_shuffle(weaponCards.begin(), weaponCards.end());
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle(weaponCards.begin(), weaponCards.end(), default_random_engine((unsigned)seed));
+        //random_shuffle(weaponCards.begin(), weaponCards.end()); this was not working!
         confidential.push_back(weaponCards.back());
         weaponCards.pop_back();
         for(int i = 0; i<weaponCards.size(); i++){
@@ -315,7 +322,8 @@ public:
             SuspectCard* card = new SuspectCard((SuspectType)i);
             suspectCards.push_back(card);
         }
-        random_shuffle(suspectCards.begin(), suspectCards.end());
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle(suspectCards.begin(), suspectCards.end(), default_random_engine((unsigned)seed));
         confidential.push_back(suspectCards.back());
         suspectCards.pop_back();
         for(int i = 0; i<suspectCards.size(); i++){
@@ -343,7 +351,8 @@ public:
             LocationCard* card = new LocationCard((LocationType)i);
             locationCards.push_back(card);
         }
-        random_shuffle(locationCards.begin(), locationCards.end());
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle(locationCards.begin(), locationCards.end(), default_random_engine((unsigned)seed));
         confidential.push_back(locationCards.back());
         locationCards.pop_back();
         for(int i = 0; i<locationCards.size(); i++){
@@ -365,7 +374,7 @@ public:
 
 class Deck {
 public:
-    /*vector<Card*> cards;
+    /* vector<Card*> cards;
      Deck() {
      for (int i = 0; i < NUM_WEAPONS; i++) {
      WeaponCard* card = new WeaponCard((WeaponType)i);
@@ -402,25 +411,56 @@ public:
         
     }
     
-    
-    
     void shuffle(){
-        random_shuffle(cards.begin(), cards.end());
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(cards.begin(), cards.end(), default_random_engine((unsigned)seed));
     }
 };
 
+class Accusation{
+public:
+    bool checkAccusationisCorrect(string killer1, string weaponused1, string crimescene1){// order of cards is weapon, suspect, location
+        string weaponconfidential;
+        string suspectconfidential;
+        string locationconfidential;
+        for (int q = 0; q <confidential.size(); q++){
+            if (confidential[q]->type == Weapon){
+                WeaponCard* weapon1 = (WeaponCard*)confidential[q];
+                weaponconfidential = getWeaponTypeString(weapon1->weaponType);
+            }else if( confidential[q]-> type == Suspect){
+                SuspectCard* suspect1 = (SuspectCard*)confidential[q];
+                suspectconfidential = getSuspectTypeString(suspect1->suspectType);
+            }else if( confidential[q]->type == Location){
+                LocationCard* location1 = (LocationCard*)confidential[q];
+                locationconfidential = getLocationTypeString(location1->locationType);
+            }
+        }
+        if ((weaponused1 == weaponconfidential) && (killer1 == suspectconfidential)&&(crimescene1==locationconfidential)){ return true;}
+        return false;
+    }
+    
+};
+
+class Suggestion{
+public:
+    bool CheckSuggestion();
+    
+};
+
 int main(int argc, const char * argv[]) {
+    char input;
+    char input1;
+    string killer;
+    string weaponused;
+    string crimescene;
+    string suspect;
+    string suspectedweapon;
+    
     Board clueBoard;
     vector<Player*> players;
     string location;
     Player* player = new Player("Miss Scarlet");
-    cout << "Miss Scarlet can start in the Lounge (LO) or the Hall (H). Please enter your location." << endl;
-    cin >> location;
-    Room* startingLocation = findRoomWithAbbreviation(location, clueBoard.rooms);
-    player->playerLocation = startingLocation;
-    //    while (1) {
-    //        player->move();
-    //    }
+
     cout << "Weapon Cards: " << endl;
     WeaponDeck wDeck;
     wDeck.printWeaponDeck();
@@ -443,9 +483,41 @@ int main(int argc, const char * argv[]) {
     deck.shuffle();
     deck.debugPrint();
     
-    return 0;
     
+    cout << "Miss Scarlet can start in the Lounge (LO) or the Hall (H). Please enter your location." << endl;
+    cin >> location;
+    Room* startingLocation = findRoomWithAbbreviation(location, clueBoard.rooms);
+    player->playerLocation = startingLocation;
+    
+    while (1) {
+        cout<< "Would you Like to make an Accusation? (y/n)"<<endl;
+        cin >> input1;
+        if( input1 == 'y'){
+            cout<< "The Murderer is: "<<endl;
+            cin.ignore();
+            getline(cin, killer);
+            cout<< "The Weapon the murderer used to Kill is: "<<endl;
+            getline(cin, weaponused);
+            cout<< "The Room the murderer murdered Mr. Boddy is: "<<endl;
+            getline(cin, crimescene);
+            Accusation accuser;
+            if( accuser.checkAccusationisCorrect(killer, weaponused, crimescene) == true){ cout<<"You WIN!!!"<<endl; break;}
+            else{ cout<<" You lose! GAME OVER!!"<<endl; break;}
+        };
+        
+        player->move();
+        
+        cout<< " Would you like to make a suggestion? (y/n) "<< endl;
+        cin>> input;
+        if( input == 'y'){
+            cout<< "Who is the suspect? "<<endl;
+            cin>> suspect;
+            cout<< "what is the suspected weapon? "<<endl;
+            cin >> suspectedweapon;
+            
+        }
+        
+    }
+    
+    return 0;
 }
-
-
-
