@@ -257,24 +257,132 @@ public:
     }
 };
 
+vector<Card*> confidential;
+
+class Envelope{
+public:
+    void printConfidential(){
+        for (int i = 0; i < confidential.size(); i++) {
+            Card* card = confidential[i];
+            if (card->type == Weapon) {
+                WeaponCard* weapon = (WeaponCard*)card;
+                cout <<"We have a weapon card: " << getWeaponTypeString(weapon->weaponType)  << endl;
+            }else if(card->type == Suspect) {
+                SuspectCard* suspect = (SuspectCard*)card;
+                cout << "We have a suspect card: " << getSuspectTypeString(suspect->suspectType)  << endl;
+            }else if (card->type == Location){
+                LocationCard* location = (LocationCard*)card;
+                cout << "We have a location card: " << getLocationTypeString(location->locationType)  << endl;
+            }
+        }
+    }
+};
+
+vector<Card*> cards;
+class WeaponDeck {
+public:
+    
+    vector<Card*> weaponCards;
+    WeaponDeck() {
+        for(int i = 0; i<NUM_WEAPONS; i++){
+            WeaponCard* card = new WeaponCard((WeaponType)i);
+            weaponCards.push_back(card);
+        }
+        random_shuffle(weaponCards.begin(), weaponCards.end());
+        confidential.push_back(weaponCards.back());
+        weaponCards.pop_back();
+        for(int i = 0; i<weaponCards.size(); i++){
+            cards.push_back(weaponCards[i]);
+        }
+    }
+    void printWeaponDeck(){
+        for (int i = 0; i < weaponCards.size(); i++) {
+            Card* card = weaponCards[i];
+            if (card->type == Weapon) {
+                WeaponCard* weapon = (WeaponCard*)card;
+                cout <<"We have a weapon card: " << getWeaponTypeString(weapon->weaponType)  << endl;
+            }
+        }
+    }
+    
+};
+
+class SuspectDeck {
+public:
+    vector<Card*> suspectCards;
+    SuspectDeck() {
+        for(int i = 0; i<NUM_SUSPECTS; i++){
+            SuspectCard* card = new SuspectCard((SuspectType)i);
+            suspectCards.push_back(card);
+        }
+        random_shuffle(suspectCards.begin(), suspectCards.end());
+        confidential.push_back(suspectCards.back());
+        suspectCards.pop_back();
+        for(int i = 0; i<suspectCards.size(); i++){
+            cards.push_back(suspectCards[i]);
+        }
+    }
+    
+    void printSuspectDeck(){
+        for (int i = 0; i < suspectCards.size(); i++) {
+            Card* card = suspectCards[i];
+            if (card->type == Suspect) {
+                SuspectCard* suspect = (SuspectCard*)card;
+                cout <<"We have a suspect card: " << getSuspectTypeString(suspect->suspectType)  << endl;
+            }
+        }
+    }
+    
+};
+
+class LocationDeck {
+public:
+    vector<Card*> locationCards;
+    LocationDeck() {
+        for(int i = 0; i<NUM_LOCATIONS; i++){
+            LocationCard* card = new LocationCard((LocationType)i);
+            locationCards.push_back(card);
+        }
+        random_shuffle(locationCards.begin(), locationCards.end());
+        confidential.push_back(locationCards.back());
+        locationCards.pop_back();
+        for(int i = 0; i<locationCards.size(); i++){
+            cards.push_back(locationCards[i]);
+        }
+    }
+    
+    void printLocationDeck(){
+        for (int i = 0; i < locationCards.size(); i++) {
+            Card* card = locationCards[i];
+            if (card->type == Location) {
+                LocationCard* location = (LocationCard*)card;
+                cout <<"We have a location card: " << getLocationTypeString(location->locationType)  << endl;
+            }
+        }
+    }
+    
+};
+
 class Deck {
 public:
-    vector<Card*> cards;
-    Deck() {
-        for (int i = 0; i < NUM_WEAPONS; i++) {
-            WeaponCard* card = new WeaponCard((WeaponType)i);
-            cards.push_back(card);
-        }
-        for (int i = 0; i < NUM_SUSPECTS; i++) {
-            SuspectCard* card = new SuspectCard((SuspectType)i);
-            cards.push_back(card);
-        }
-        for (int i = 0; i < NUM_LOCATIONS; i++) {
-            LocationCard* card = new LocationCard((LocationType)i);
-            cards.push_back(card);
-        }
-        
-    }
+    /*vector<Card*> cards;
+     Deck() {
+     for (int i = 0; i < NUM_WEAPONS; i++) {
+     WeaponCard* card = new WeaponCard((WeaponType)i);
+     cards.push_back(card);
+     }
+     
+     for (int i = 0; i < NUM_SUSPECTS; i++) {
+     SuspectCard* card = new SuspectCard((SuspectType)i);
+     cards.push_back(card);
+     }
+     
+     
+     for (int i = 0; i < NUM_LOCATIONS; i++) {
+     LocationCard* card = new LocationCard((LocationType)i);
+     cards.push_back(card);
+     }
+     }*/
     void debugPrint() {
         for (int i = 0; i < cards.size(); i++) {
             Card* card = cards[i];
@@ -291,7 +399,10 @@ public:
                 cout <<"We have a location card: " << getLocationTypeString(location->locationType)  << endl;
             }
         }
+        
     }
+    
+    
     
     void shuffle(){
         random_shuffle(cards.begin(), cards.end());
@@ -310,11 +421,28 @@ int main(int argc, const char * argv[]) {
     //    while (1) {
     //        player->move();
     //    }
+    cout << "Weapon Cards: " << endl;
+    WeaponDeck wDeck;
+    wDeck.printWeaponDeck();
+    
+    cout << "Suspect Cards: " << endl;
+    SuspectDeck sDeck;
+    sDeck.printSuspectDeck();
+    
+    cout << "Location Cards: " << endl;
+    LocationDeck lDeck;
+    lDeck.printLocationDeck();
+    
+    cout << "CONFIDENTIAL ENVELOPE: " << endl;
+    Envelope answers;
+    answers.printConfidential();
+    
+    
+    cout << "Shuffled Deck: " << endl;
     Deck deck;
-    deck.debugPrint();
     deck.shuffle();
-    cout << "SHUFFLE TIME" << endl;
     deck.debugPrint();
+    
     return 0;
     
 }
