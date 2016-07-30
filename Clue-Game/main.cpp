@@ -51,7 +51,7 @@ string getWeaponTypeString(WeaponType type) {
     }
 }
 
-#define NUM_SUSPECTS 6
+#define NUM_CHARACTERS 6
 
 enum CharacterType {
     Scarlet,
@@ -116,6 +116,42 @@ string getLocationTypeString(LocationType type) {
     }
 };
 
+struct StartingLocations {
+    LocationType choiceOne;
+    LocationType choiceTwo;
+};
+
+StartingLocations getStartingLocations(CharacterType character) {
+    StartingLocations startingLocations;
+    switch (character) {
+        case Scarlet:
+            startingLocations.choiceOne = Hall;
+            startingLocations.choiceTwo = Lounge;
+            break;
+        case Mustard:
+            startingLocations.choiceOne = Lounge;
+            startingLocations.choiceTwo = DiningRoom;
+            break;
+        case White:
+            startingLocations.choiceOne = Kitchen;
+            startingLocations.choiceTwo = Ballroom;
+            break;
+        case Green:
+            startingLocations.choiceOne = Ballroom;
+            startingLocations.choiceTwo = Conservatory;
+            break;
+        case Peacock:
+            startingLocations.choiceOne = Conservatory;
+            startingLocations.choiceTwo = BilliardRoom;
+            break;
+        case Plum:
+            startingLocations.choiceOne = Library;
+            startingLocations.choiceTwo = Study;
+            break;
+
+    }
+    return startingLocations;
+}
 
 class Room {
 public:
@@ -197,6 +233,7 @@ public:
     
 };
 
+//function to return a pointer to a room based on its LocationType
 Room* findRoomWithIdentity(LocationType type, vector<Room*> rooms) {
     for (int i = 0; i < rooms.size(); i++){
         if (rooms[i]->identity == type) {
@@ -206,50 +243,35 @@ Room* findRoomWithIdentity(LocationType type, vector<Room*> rooms) {
     return NULL;
 }
 
-class Player {
-public:
-    string name;
-    CharacterType identity;
-    Room* playerLocation;
-    Player(CharacterType type) {
-        name = getCharacterTypeString(type);
-        identity = type;
-    }
-    void move(){
-        int newLocation;
-        cout << "You are currently in the " << playerLocation->name << "." << endl;
-        cout << "From here, you can move to the ";
-        for (int i = 0; i < playerLocation->connectedRooms.size(); i++) {
-            LocationType currentRoomIdentity = playerLocation->connectedRooms[i]->identity;
-            cout << currentRoomIdentity << ". " << playerLocation->connectedRooms[i]->name << endl;
+//function to handle user entering a non-numeric character
+int getIntFromConsole() {
+    int input;
+    bool badEntry = false;
+    while(1) {
+        cin >> input;
+        badEntry = cin.fail();
+        if (badEntry) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid entry. Please enter a number." << endl;
         }
-        while(1){
-            cout << "Please enter the number of the room you would like to move to." << endl;
-            cin >> newLocation;
-            Room* newRoom = findRoomWithIdentity((LocationType)newLocation, playerLocation->connectedRooms);
-            if (newRoom != NULL) {
-                playerLocation = newRoom;
-                break;
-            }
-            cout << "Not a valid number. Please try again." << endl;
-        }
+        else break;
     }
-};
+    return input;
+}
 
-class HumanPlayer : public Player {
-public:
-    HumanPlayer(CharacterType type) : Player(type) {
+//function to get a random number between 0 and max for computer player decisions
+int getRandomNumber(int max) {
+    random_device rd;
+    mt19937 eng(rd());
+    uniform_int_distribution<> distr(0, max);
+    return distr(eng);
+}
 
-    }
-};
-
-class ComputerPlayer : public Player {
-public:
-    ComputerPlayer(CharacterType type) : Player(type) {
-        
-    }
-};
-
+//allows getRandomNumber function to work using the size of array as a parameter
+int getRandomNumber(unsigned long max) {
+    return getRandomNumber((int)max);
+}
 
 class Card {
 public:
@@ -283,12 +305,100 @@ public:
     }
 };
 
+class Player {
+public:
+    string name;
+    CharacterType identity;
+    Room* playerLocation;
+    vector<Card*> playersCards;
+    Player(CharacterType type) {
+        name = getCharacterTypeString(type);
+        identity = type;
+    }
+    virtual void chooseStartingLocation(Board board) {}
+    virtual void move() {}
+};
+
+class HumanPlayer : public Player {
+public:
+    HumanPlayer(CharacterType type) : Player(type) {}
+    void chooseStartingLocation(Board board) {
+        StartingLocations startingLocations = getStartingLocations(identity);
+        cout << name << " can start in the " << endl;
+        cout << startingLocations.choiceOne << ". " << getLocationTypeString(startingLocations.choiceOne) << endl;
+        cout << startingLocations.choiceTwo << ". " << getLocationTypeString(startingLocations.choiceTwo) << endl;
+        int selectedLocation;
+        while(1) {
+            selectedLocation = getIntFromConsole();
+            if ((LocationType)selectedLocation == startingLocations.choiceOne || (LocationType)selectedLocation == startingLocations.choiceTwo) {
+                Room* room = findRoomWithIdentity((LocationType)selectedLocation, board.rooms);
+                if (room != NULL) {
+                    playerLocation = room;
+                    break;
+                }
+            }
+            else {
+                cout << "Not a valid number. Please enter a valid starting room number." << endl;
+            }
+        }
+    }
+    void move(){
+        int newLocation;
+        cout << "You are currently in the " << playerLocation->name << "." << endl;
+        cout << "From here, you can move to the ";
+        for (int i = 0; i < playerLocation->connectedRooms.size(); i++) {
+            LocationType currentRoomIdentity = playerLocation->connectedRooms[i]->identity;
+            cout << currentRoomIdentity << ". " << playerLocation->connectedRooms[i]->name << endl;
+        }
+        while(1){
+            cout << "Please enter the number of the room you would like to move to." << endl;
+            newLocation = getIntFromConsole();
+            Room* newRoom = findRoomWithIdentity((LocationType)newLocation, playerLocation->connectedRooms);
+            if (newRoom != NULL) {
+                playerLocation = newRoom;
+                break;
+            }
+            cout << "Not a valid number. Please try again." << endl;
+        }
+    }
+    
+};
+
+class ComputerPlayer : public Player {
+public:
+    ComputerPlayer(CharacterType type) : Player(type) {}
+    void chooseStartingLocation(Board board) {
+        StartingLocations startingLocations = getStartingLocations(identity);
+        int selectedLocation = getRandomNumber(1);
+        Room *room;
+        if (selectedLocation == 0) {
+            room = findRoomWithIdentity(startingLocations.choiceOne, board.rooms);
+        }
+        else if (selectedLocation == 1) {
+            room = findRoomWithIdentity(startingLocations.choiceTwo, board.rooms);
+        }
+        if (room != NULL) {
+            playerLocation = room;
+            cout << name << " is starting in the " << playerLocation->name << endl;
+        }
+    }
+    void move() {
+        int newLocation = getRandomNumber(playerLocation->connectedRooms.size());
+        playerLocation = playerLocation->connectedRooms[newLocation];
+        cout << name << " has moved to the " << playerLocation->name << endl;
+    }
+};
+
+
+
+//these are the three Card Types that will go in the killer envelope
 struct TypeCollection {
     WeaponType weaponUsed;
     CharacterType suspectUsed;
     LocationType locationUsed;
 };
 
+//holds the three killer cards
 class Envelope{
 public:
     TypeCollection envelopeCards;
@@ -342,7 +452,7 @@ public:
     vector<SuspectCard*> suspectCards;
     //constructs and shuffles the SuspectDeck
     SuspectDeck() {
-        for(int i = 0; i<NUM_SUSPECTS; i++){
+        for(int i = 0; i<NUM_CHARACTERS; i++){
             SuspectCard* card = new SuspectCard((CharacterType)i);
             suspectCards.push_back(card);
         }
@@ -412,25 +522,37 @@ public:
          long long seed = std::chrono::system_clock::now().time_since_epoch().count();
          shuffle(cards.begin(), cards.end(), default_random_engine((unsigned)seed));
      }
-    void debugPrintDeck() {
-        for (int i = 0; i < cards.size(); i++) {
-            Card* card = cards[i];
-            if (card->type == Weapon) {
-                WeaponCard* weapon = (WeaponCard*)card;
-                cout <<"We have a weapon card: " << getWeaponTypeString(weapon->weaponType)  << endl;
-            }
-            else if (card->type == Suspect) {
-                SuspectCard* suspect = (SuspectCard*)card;
-                cout <<"We have a suspect card: " << getCharacterTypeString(suspect->characterType)  << endl;
-            }
-            else if (card->type == Location) {
-                LocationCard* location = (LocationCard*)card;
-                cout <<"We have a location card: " << getLocationTypeString(location->locationType)  << endl;
+
+    void dealCards(vector<Player*> players) {
+        while (!cards.empty()) {
+            for (int i = 0; i < players.size(); i ++) {
+                if (cards.empty()) break;
+                players[i]->playersCards.push_back(cards.back());
+                cards.pop_back();
+
             }
         }
-
     }
 };
+
+void printCards(vector<Card*> cards) {
+    for (int i = 0; i < cards.size(); i++) {
+        Card* card = cards[i];
+        if (card->type == Weapon) {
+            WeaponCard* weapon = (WeaponCard*)card;
+            cout <<"Weapon card: " << getWeaponTypeString(weapon->weaponType)  << endl;
+        }
+        else if (card->type == Suspect) {
+            SuspectCard* suspect = (SuspectCard*)card;
+            cout <<"Suspect card: " << getCharacterTypeString(suspect->characterType)  << endl;
+        }
+        else if (card->type == Location) {
+            LocationCard* location = (LocationCard*)card;
+            cout <<"Location card: " << getLocationTypeString(location->locationType)  << endl;
+        }
+    }
+    
+}
 
 //class Accusation{
 //public:
@@ -487,7 +609,7 @@ int main(int argc, const char * argv[]) {
     //user inputs how many computer players will be playing
     cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
     while (1) {
-        cin >> numberOfComputerPlayers;
+        numberOfComputerPlayers = getIntFromConsole();
         if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
             break;
         }
@@ -497,13 +619,13 @@ int main(int argc, const char * argv[]) {
     }
     //user selects his/her character
     cout << "Which character would you like to be (enter player number): " << endl;
-    for (int i = 0; i < NUM_SUSPECTS; i++) {
+    for (int i = 0; i < NUM_CHARACTERS; i++) {
         cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
     }
     //user's character is added to players vector
     while(1) {
-        cin >> humanPlayerSelection;
-        if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_SUSPECTS) {
+        humanPlayerSelection = getIntFromConsole();
+        if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_CHARACTERS) {
             CharacterType selectedType = (CharacterType)humanPlayerSelection;
             Player* player = new HumanPlayer(selectedType);
             players.push_back(player);
@@ -515,7 +637,7 @@ int main(int argc, const char * argv[]) {
     }
     //adds remaining characters to a temporary vector
     vector<int> charactersLeftToPick;
-    for (int i = 0; i < 5; i ++) {
+    for (int i = 0; i < NUM_CHARACTERS; i ++) {
         if (i != humanPlayerSelection) {
             charactersLeftToPick.push_back(i);
         }
@@ -551,8 +673,15 @@ int main(int argc, const char * argv[]) {
     Envelope confidential(weaponUsed, suspectUsed, locationUsed);
     //creates the full Deck with all Card Types
     Deck fullDeck(weaponDeck, suspectDeck, locationDeck);
-    fullDeck.debugPrintDeck();
-    confidential.debugPrintEnvelope();
+    for (int i = 0; i < players.size(); i ++) {
+        players[i]->chooseStartingLocation(clueBoard);
+    }
+    fullDeck.dealCards(players);
+    for (int i = 0; i < players.size(); i ++) {
+        cout << players[i]->name << " has the following cards: " << endl;
+        printCards(players[i]->playersCards);
+    }
+
     
     
 //    while (1) {
