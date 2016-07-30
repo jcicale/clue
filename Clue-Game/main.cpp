@@ -230,6 +230,9 @@ public:
         diningRoom->addConnectedRoom(lounge);
         diningRoom->addConnectedRoom(kitchen);
     }
+    void movePlayerToRoom(Player* player, LocationType location) {
+        
+    }
     
 };
 
@@ -305,6 +308,14 @@ public:
     }
 };
 
+//these are the three Card Types that will go in the killer envelope
+struct TypeCollection {
+    WeaponType weaponUsed;
+    CharacterType suspectUsed;
+    LocationType locationUsed;
+};
+
+
 class Player {
 public:
     string name;
@@ -317,6 +328,18 @@ public:
     }
     virtual void chooseStartingLocation(Board board) {}
     virtual void move() {}
+    virtual TypeCollection* makeAccusation() {
+        return NULL;
+    }
+    virtual TypeCollection* makeSuggestion() {
+        return NULL;
+    }
+    virtual Card* disproveSuggestion(TypeCollection suggestion) {
+        return NULL;
+    }
+    virtual void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard) {
+        
+    }
 };
 
 class HumanPlayer : public Player {
@@ -345,7 +368,7 @@ public:
     void move(){
         int newLocation;
         cout << "You are currently in the " << playerLocation->name << "." << endl;
-        cout << "From here, you can move to the ";
+        cout << "From here, you can move to the " << endl;
         for (int i = 0; i < playerLocation->connectedRooms.size(); i++) {
             LocationType currentRoomIdentity = playerLocation->connectedRooms[i]->identity;
             cout << currentRoomIdentity << ". " << playerLocation->connectedRooms[i]->name << endl;
@@ -383,7 +406,7 @@ public:
         }
     }
     void move() {
-        int newLocation = getRandomNumber(playerLocation->connectedRooms.size());
+        int newLocation = getRandomNumber(playerLocation->connectedRooms.size()-1);
         playerLocation = playerLocation->connectedRooms[newLocation];
         cout << name << " has moved to the " << playerLocation->name << endl;
     }
@@ -391,12 +414,6 @@ public:
 
 
 
-//these are the three Card Types that will go in the killer envelope
-struct TypeCollection {
-    WeaponType weaponUsed;
-    CharacterType suspectUsed;
-    LocationType locationUsed;
-};
 
 //holds the three killer cards
 class Envelope{
@@ -652,13 +669,15 @@ int main(int argc, const char * argv[]) {
         players.push_back(player);
         charactersLeftToPick.pop_back();
     }
+    //puts the players vector back in playing order
+    sort(players.begin(), players.end(), isOrderedBefore);
+    
     //shows who is playing
     cout << "This game's players are: " << endl;
     for (int i = 0; i < players.size(); i++) {
         cout << players[i]->name << endl;
     }
-    //puts the players vector back in playing order
-    sort(players.begin(), players.end(), isOrderedBefore);
+    
     //puts human player in his/her starting position
     
     //creates each Type Deck
@@ -676,10 +695,22 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < players.size(); i ++) {
         players[i]->chooseStartingLocation(clueBoard);
     }
-    fullDeck.dealCards(players);
-    for (int i = 0; i < players.size(); i ++) {
-        cout << players[i]->name << " has the following cards: " << endl;
-        printCards(players[i]->playersCards);
+    while (1) {
+        for (int i = 0; i < players.size(); i++) {
+            cout << players[i]->name << " is up." << endl;
+            TypeCollection* accusation = players[i]->makeAccusation();
+            if (accusation != NULL) {
+                //Check the accusation?
+            }
+            players[i]->move();
+            TypeCollection* suggestion = players[i]->makeSuggestion();
+            if (suggestion != NULL) {
+                //Check the suggestion?
+            }
+            cout << players[i]->name << "'s turn has ended. " << players
+            [i]->name << " is in the " << players[i]->playerLocation->name << endl;
+        }
+        
     }
 
     
