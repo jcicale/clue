@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		494CA1C41D4D3A3C00AF8BE3 /* Room.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 494CA1C21D4D3A3C00AF8BE3 /* Room.cpp */; };
+		494CA1C81D4D42E300AF8BE3 /* Board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 494CA1C61D4D42E300AF8BE3 /* Board.cpp */; };
+		494CA1CC1D4D51D100AF8BE3 /* Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 494CA1CA1D4D51D100AF8BE3 /* Card.cpp */; };
+		494CA1CF1D4D52FC00AF8BE3 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 494CA1CD1D4D52FC00AF8BE3 /* Player.cpp */; };
+		494CA1D21D4D59FF00AF8BE3 /* Envelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 494CA1D01D4D59FF00AF8BE3 /* Envelope.cpp */; };
+		494CA1D51D4D5B0F00AF8BE3 /* Deck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 494CA1D31D4D5B0F00AF8BE3 /* Deck.cpp */; };
 		49886BA91D3A9FB500E237C4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49886BA81D3A9FB500E237C4 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +29,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		494CA1C11D4D39D100AF8BE3 /* Enumerations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enumerations.h; sourceTree = "<group>"; };
+		494CA1C21D4D3A3C00AF8BE3 /* Room.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Room.cpp; sourceTree = "<group>"; };
+		494CA1C31D4D3A3C00AF8BE3 /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
+		494CA1C61D4D42E300AF8BE3 /* Board.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Board.cpp; sourceTree = "<group>"; };
+		494CA1C71D4D42E300AF8BE3 /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
+		494CA1C91D4D514D00AF8BE3 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		494CA1CA1D4D51D100AF8BE3 /* Card.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Card.cpp; sourceTree = "<group>"; };
+		494CA1CB1D4D51D100AF8BE3 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		494CA1CD1D4D52FC00AF8BE3 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		494CA1CE1D4D52FC00AF8BE3 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		494CA1D01D4D59FF00AF8BE3 /* Envelope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Envelope.cpp; sourceTree = "<group>"; };
+		494CA1D11D4D59FF00AF8BE3 /* Envelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Envelope.h; sourceTree = "<group>"; };
+		494CA1D31D4D5B0F00AF8BE3 /* Deck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Deck.cpp; sourceTree = "<group>"; };
+		494CA1D41D4D5B0F00AF8BE3 /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deck.h; sourceTree = "<group>"; };
 		49886BA51D3A9FB500E237C4 /* Clue-Game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Clue-Game"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49886BA81D3A9FB500E237C4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +78,20 @@
 			isa = PBXGroup;
 			children = (
 				49886BA81D3A9FB500E237C4 /* main.cpp */,
+				494CA1D31D4D5B0F00AF8BE3 /* Deck.cpp */,
+				494CA1D41D4D5B0F00AF8BE3 /* Deck.h */,
+				494CA1D01D4D59FF00AF8BE3 /* Envelope.cpp */,
+				494CA1D11D4D59FF00AF8BE3 /* Envelope.h */,
+				494CA1CD1D4D52FC00AF8BE3 /* Player.cpp */,
+				494CA1CE1D4D52FC00AF8BE3 /* Player.h */,
+				494CA1CA1D4D51D100AF8BE3 /* Card.cpp */,
+				494CA1CB1D4D51D100AF8BE3 /* Card.h */,
+				494CA1C11D4D39D100AF8BE3 /* Enumerations.h */,
+				494CA1C21D4D3A3C00AF8BE3 /* Room.cpp */,
+				494CA1C31D4D3A3C00AF8BE3 /* Room.h */,
+				494CA1C61D4D42E300AF8BE3 /* Board.cpp */,
+				494CA1C71D4D42E300AF8BE3 /* Board.h */,
+				494CA1C91D4D514D00AF8BE3 /* Utility.h */,
 			);
 			path = "Clue-Game";
 			sourceTree = "<group>";
@@ -118,7 +152,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				494CA1C81D4D42E300AF8BE3 /* Board.cpp in Sources */,
+				494CA1C41D4D3A3C00AF8BE3 /* Room.cpp in Sources */,
 				49886BA91D3A9FB500E237C4 /* main.cpp in Sources */,
+				494CA1CC1D4D51D100AF8BE3 /* Card.cpp in Sources */,
+				494CA1D51D4D5B0F00AF8BE3 /* Deck.cpp in Sources */,
+				494CA1CF1D4D52FC00AF8BE3 /* Player.cpp in Sources */,
+				494CA1D21D4D59FF00AF8BE3 /* Envelope.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
