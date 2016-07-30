@@ -1,3 +1,4 @@
+
 //
 //  main.cpp
 //  Clue-Game
@@ -10,6 +11,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+# include <ctime>
+#include <cstdlib>
+#include <random>
 
 using namespace std;
 
@@ -126,6 +130,20 @@ public:
     }
 };
 
+class HumanPlayer : public Player {
+public:
+    HumanPlayer(string playerName) : Player(playerName) {
+
+    }
+};
+
+class ComputerPlayer : public Player {
+public:
+    ComputerPlayer(string playerName) : Player(playerName) {
+        
+    }
+};
+
 enum CardType {
     Weapon,
     Suspect,
@@ -223,7 +241,7 @@ string getLocationTypeString(LocationType type) {
         case DiningRoom:
             return "Dining Room";
     }
-}
+};
 
 class Card {
 public:
@@ -257,24 +275,136 @@ public:
     }
 };
 
+
+vector<Card*> confidential;
+
+class Envelope{
+public:
+    void printConfidential(){
+        for (int i = 0; i < confidential.size(); i++) {
+            Card* card = confidential[i];
+            if (card->type == Weapon) {
+                WeaponCard* weapon = (WeaponCard*)card;
+                cout <<"We have a weapon card: " << getWeaponTypeString(weapon->weaponType)  << endl;
+            }else if(card->type == Suspect) {
+                SuspectCard* suspect = (SuspectCard*)card;
+                cout << "We have a suspect card: " << getSuspectTypeString(suspect->suspectType)  << endl;
+            }else if (card->type == Location){
+                LocationCard* location = (LocationCard*)card;
+                cout << "We have a location card: " << getLocationTypeString(location->locationType)  << endl;
+            }
+        }
+    }
+};
+
+vector<Card*> cards;
+
+class WeaponDeck {
+public:
+    vector<Card*> weaponCards;
+    WeaponDeck() {
+        for(int i = 0; i<NUM_WEAPONS; i++){
+            WeaponCard* card = new WeaponCard((WeaponType)i);
+            weaponCards.push_back(card);
+        }
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle(weaponCards.begin(), weaponCards.end(), default_random_engine((unsigned)seed));
+        confidential.push_back(weaponCards.back());
+        weaponCards.pop_back();
+        for(int i = 0; i<weaponCards.size(); i++){
+            cards.push_back(weaponCards[i]);
+        }
+    }
+    void printWeaponDeck(){
+        for (int i = 0; i < weaponCards.size(); i++) {
+            Card* card = weaponCards[i];
+            if (card->type == Weapon) {
+                WeaponCard* weapon = (WeaponCard*)card;
+                cout <<"We have a weapon card: " << getWeaponTypeString(weapon->weaponType)  << endl;
+            }
+        }
+    }
+    
+};
+
+class SuspectDeck {
+public:
+    vector<Card*> suspectCards;
+    SuspectDeck() {
+        for(int i = 0; i<NUM_SUSPECTS; i++){
+            SuspectCard* card = new SuspectCard((SuspectType)i);
+            suspectCards.push_back(card);
+        }
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle(suspectCards.begin(), suspectCards.end(), default_random_engine((unsigned)seed));
+        confidential.push_back(suspectCards.back());
+        suspectCards.pop_back();
+        for(int i = 0; i<suspectCards.size(); i++){
+            cards.push_back(suspectCards[i]);
+        }
+    }
+    
+    void printSuspectDeck(){
+        for (int i = 0; i < suspectCards.size(); i++) {
+            Card* card = suspectCards[i];
+            if (card->type == Suspect) {
+                SuspectCard* suspect = (SuspectCard*)card;
+                cout <<"We have a suspect card: " << getSuspectTypeString(suspect->suspectType)  << endl;
+            }
+        }
+    }
+    
+};
+
+class LocationDeck {
+public:
+    vector<Card*> locationCards;
+    LocationDeck() {
+        for(int i = 0; i<NUM_LOCATIONS; i++){
+            LocationCard* card = new LocationCard((LocationType)i);
+            locationCards.push_back(card);
+        }
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle(locationCards.begin(), locationCards.end(), default_random_engine((unsigned)seed));
+        confidential.push_back(locationCards.back());
+        locationCards.pop_back();
+        for(int i = 0; i<locationCards.size(); i++){
+            cards.push_back(locationCards[i]);
+        }
+    }
+    
+    void printLocationDeck(){
+        for (int i = 0; i < locationCards.size(); i++) {
+            Card* card = locationCards[i];
+            if (card->type == Location) {
+                LocationCard* location = (LocationCard*)card;
+                cout <<"We have a location card: " << getLocationTypeString(location->locationType)  << endl;
+            }
+        }
+    }
+    
+};
+
 class Deck {
 public:
-    vector<Card*> cards;
-    Deck() {
-        for (int i = 0; i < NUM_WEAPONS; i++) {
-            WeaponCard* card = new WeaponCard((WeaponType)i);
-            cards.push_back(card);
-        }
-        for (int i = 0; i < NUM_SUSPECTS; i++) {
-            SuspectCard* card = new SuspectCard((SuspectType)i);
-            cards.push_back(card);
-        }
-        for (int i = 0; i < NUM_LOCATIONS; i++) {
-            LocationCard* card = new LocationCard((LocationType)i);
-            cards.push_back(card);
-        }
-        
-    }
+    /* vector<Card*> cards;
+     Deck() {
+     for (int i = 0; i < NUM_WEAPONS; i++) {
+     WeaponCard* card = new WeaponCard((WeaponType)i);
+     cards.push_back(card);
+     }
+     
+     for (int i = 0; i < NUM_SUSPECTS; i++) {
+     SuspectCard* card = new SuspectCard((SuspectType)i);
+     cards.push_back(card);
+     }
+     
+     
+     for (int i = 0; i < NUM_LOCATIONS; i++) {
+     LocationCard* card = new LocationCard((LocationType)i);
+     cards.push_back(card);
+     }
+     }*/
     void debugPrint() {
         for (int i = 0; i < cards.size(); i++) {
             Card* card = cards[i];
@@ -291,33 +421,151 @@ public:
                 cout <<"We have a location card: " << getLocationTypeString(location->locationType)  << endl;
             }
         }
+        
     }
     
     void shuffle(){
-        random_shuffle(cards.begin(), cards.end());
+        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(cards.begin(), cards.end(), default_random_engine((unsigned)seed));
     }
 };
 
+class Accusation{
+public:
+    bool checkAccusationisCorrect(string killer1, string weaponused1, string crimescene1){// order of cards is weapon, suspect, location
+        string weaponconfidential;
+        string suspectconfidential;
+        string locationconfidential;
+        for (int q = 0; q <confidential.size(); q++){
+            if (confidential[q]->type == Weapon){
+                WeaponCard* weapon1 = (WeaponCard*)confidential[q];
+                weaponconfidential = getWeaponTypeString(weapon1->weaponType);
+            }else if( confidential[q]-> type == Suspect){
+                SuspectCard* suspect1 = (SuspectCard*)confidential[q];
+                suspectconfidential = getSuspectTypeString(suspect1->suspectType);
+            }else if( confidential[q]->type == Location){
+                LocationCard* location1 = (LocationCard*)confidential[q];
+                locationconfidential = getLocationTypeString(location1->locationType);
+            }
+        }
+        if ((weaponused1 == weaponconfidential) && (killer1 == suspectconfidential)&&(crimescene1==locationconfidential)){ return true;}
+        return false;
+    }
+    
+};
+
+class Suggestion{
+public:
+    bool CheckSuggestion();
+    
+    /* Once a player makes a suggestion, each computer player must check their decks for the suggested cards. If 
+        any of the suggested cards match the ones in their decks, they show the player that card. If none match the
+        computer player passes. Each player only has to show 1 card to the suggesting player. If all of the 
+        compuer players pass, the suggestion is correct and the human player is then allowed to make an accusation
+     */
+    
+};
+
 int main(int argc, const char * argv[]) {
+    char input;
+    char input1;
+    string killer;
+    string weaponused;
+    string crimescene;
+    string suspect;
+    string suspectedweapon;
+    int numberOfComputerPlayers;
+    int humanPlayerSelection;
+    
+    
     Board clueBoard;
     vector<Player*> players;
-    string location;
-    Player* player = new Player("Miss Scarlet");
-    cout << "Miss Scarlet can start in the Lounge (LO) or the Hall (H). Please enter your location." << endl;
-    cin >> location;
-    Room* startingLocation = findRoomWithAbbreviation(location, clueBoard.rooms);
-    player->playerLocation = startingLocation;
-    //    while (1) {
-    //        player->move();
-    //    }
-    Deck deck;
-    deck.debugPrint();
-    deck.shuffle();
-    cout << "SHUFFLE TIME" << endl;
-    deck.debugPrint();
-    return 0;
+    cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
+    while (1) {
+        cin >> numberOfComputerPlayers;
+        if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
+            break;
+        }
+        else {
+            cout << "Not a valid number. Please enter a number between 2 and 5." << endl;
+        }
+    }
+    cout << "Which character would you like to be (enter player number): " << endl;
+    for (int i = 0; i < NUM_SUSPECTS; i++) {
+        cout << i << ". " << getSuspectTypeString((SuspectType)i) << endl;
+    }
+    while(1) {
+        cin >> humanPlayerSelection;
+        if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_SUSPECTS) {
+            Player* player = new HumanPlayer(getSuspectTypeString((SuspectType)humanPlayerSelection));
+            players.push_back(player);
+            break;
+        }
+        else {
+            cout << "Not a valid number. Please enter a valid character number." << endl;
+        }
+    }
+    //adding remaining characters to a temporary vector
+    vector<int> charactersLeftToPick;
+    for (int i = 0; i < 5; i ++) {
+        if (i != humanPlayerSelection) {
+            charactersLeftToPick.push_back(i);
+        }
+    }
+    //shuffling the temporary vector
+    long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle(charactersLeftToPick.begin(), charactersLeftToPick.end(), default_random_engine((unsigned)seed));
+    //creating computer players
+    for (int i = 0; i < numberOfComputerPlayers; i++) {
+        Player* player = new ComputerPlayer(getSuspectTypeString((SuspectType)charactersLeftToPick.back()));
+        players.push_back(player);
+        charactersLeftToPick.pop_back();
+    }
+    //showing who is playing
+    cout << "This game's players are: " << endl;
+    for (int i = 0; i < players.size(); i++) {
+        cout << players[i]->name << endl;
+    }
+
     
+//    while (1) {
+//        cout<< "Would you Like to make an Accusation? (y/n)"<<endl;
+//        cin >> input1;
+//        if( input1 == 'y'){
+//            cout<< "The Murderer is: "<<endl;
+//            cin.ignore();
+//            getline(cin, killer);
+//            cout<< "The Weapon the murderer used to Kill is: "<<endl;
+//            getline(cin, weaponused);
+//            cout<< "The Room the murderer murdered Mr. Boddy is: "<<endl;
+//            getline(cin, crimescene);
+//            Accusation accuser;
+//            if( accuser.checkAccusationisCorrect(killer, weaponused, crimescene) == true){ cout<<"You WIN!!!"<<endl; break;}
+//            else{ cout<<" You lose! GAME OVER!!"<<endl; break;}
+//        };
+//        
+//        player->move();
+//        
+//        cout<< " Would you like to make a suggestion? (y/n) "<< endl;
+//        cin>> input;
+//        if( input == 'y'){
+//            cout<< "Who is the suspect? "<<endl;
+//            cin>> suspect;
+//            cout<< "what is the suspected weapon? "<<endl;
+//            cin >> suspectedweapon;
+//            
+//        }
+//        
+//    }
+    
+    return 0;
 }
 
-
-
+// TO DO:
+//      -Suggestions
+//      -Running list of cards that have been proven to be not in the envelope
+// THINGS TO REMEMBER:
+//      -Each player can only make 1 accusation.
+//      -If the player's accusation is incorrect, they cannot make any more moves but the game still continues
+//         -we could have the game play out until one of the other players wins or we can just print the
+//              answers once the human player has answered incorrectly.
