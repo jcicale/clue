@@ -1,3 +1,8 @@
+So I added the work I did today, onto the source area, please read my commits and stuff. I sorta need some help in some areas/ and I didn;t Finnish, but Im still working on it
+ 
+- Kyle Erchinger
+
+
 #CLUE GAME
 
 ##Welcome to Clue!
@@ -104,13 +109,3 @@
 		3. If Player's accusation is correct: Player wins
 
 		4. If Player's accusation is correct: Player loses
-
-
-
-
-
-
-
-
-
-
