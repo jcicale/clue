@@ -23,8 +23,7 @@
 #include "Deck.h"
 
 
-<<<<<<< HEAD
-enum CardType {
+/*enum CardType {
     Weapon,
     Suspect,
     Location
@@ -668,7 +667,7 @@ bool isOrderedBefore(Player* playerOne, Player* playerTwo) {
     else return false;
 }
 =======
->>>>>>> master
+>>>>>>> master*/
 
 int main(int argc, const char * argv[]) {
     int numberOfComputerPlayers;
@@ -764,9 +763,9 @@ int main(int argc, const char * argv[]) {
             }
             players[i]->move();
             TypeCollection* suggestion = players[i]->makeSuggestion();
-            if (suggestion != NULL) {
-
-                //Check the suggestion?
+            Card* suggestedCard = players[i]->disproveSuggestion(suggestion);
+            if (suggestedCard != NULL) {
+                players[i]->suggestionDisproved(suggestedCard);
             }
             cout << players[i]->name << "'s turn has ended. " << players
             [i]->name << " is in the " << players[i]->playerLocation->name << endl;

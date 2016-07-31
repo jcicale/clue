@@ -13,6 +13,7 @@
 #include "Card.h"
 #include "Player.h"
 
+
 class WeaponDeck {
 public:
     vector<WeaponCard*> weaponCards;

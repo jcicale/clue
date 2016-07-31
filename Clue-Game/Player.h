@@ -28,7 +28,7 @@ public:
     virtual TypeCollection* makeAccusation();
     virtual TypeCollection* makeSuggestion();
     virtual Card* disproveSuggestion(TypeCollection suggestion);
-    virtual void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    virtual void suggestionDisproved(Card* disprovingCard);
 };
 
 class HumanPlayer : public Player {
@@ -39,7 +39,7 @@ public:
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
     Card* disproveSuggestion(TypeCollection suggestion);
-    void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    void suggestionDisproved(Card* disprovingCard);
 };
 
 class ComputerPlayer : public Player {
@@ -50,7 +50,7 @@ public:
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
     Card* disproveSuggestion(TypeCollection suggestion);
-    void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    void suggestionDisproved(Card* disprovingCard);
 
 };
 

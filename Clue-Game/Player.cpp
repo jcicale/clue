@@ -138,12 +138,22 @@ TypeCollection* HumanPlayer::makeSuggestion() {
         else cout << "Not a valid number, please try again" << endl;
     }
 }
-
 Card* HumanPlayer::disproveSuggestion(TypeCollection suggestion) {
+
+        for(int x= 0; x<playersCards.size(); x++){
+           if (playersCards[x]->type == suggestion.weaponUsed ||playersCards[x]->type == suggestion.locationUsed || playersCards[x]->type==suggestion.suspectUsed ){
+               cout<< "This card: "<< playersCards[x]<< "disporves your suggestion"<<endl;
+               suggestionDisproved(suggestion, playersCards[x]);
+               return NULL;
+           }
+       }
+    cout<<" Suggestion could not be dissproved"<<endl;
     return NULL;
 }
 
 void HumanPlayer::suggestionDisproved(TypeCollection suggestion, Card* disprovingCard) {
+
+
 }
 
 //ComputerPlayer subclass implementation
@@ -188,10 +198,20 @@ TypeCollection* ComputerPlayer::makeSuggestion() {
     return computerSuggestion;
 }
 
+
 Card* ComputerPlayer::disproveSuggestion(TypeCollection suggestion) {
+    for(int x= 0; x<playersCards.size(); x++){
+        if (playersCards[x]->type == suggestion.weaponUsed ||playersCards[x]->type == suggestion.locationUsed || playersCards[x]->type==suggestion.suspectUsed ){
+            cout<< "This card: "<< playersCards[x]<< "disporves your suggestion"<<endl;
+            return playersCards[x];
+        }
+    }
+    cout<<" Suggestion could not be dissproved"<<endl;
     return NULL;
 }
-void ComputerPlayer::suggestionDisproved(TypeCollection suggestion, Card* disprovingCard) {
+
+
+void ComputerPlayer::suggestionDisproved(Card* disprovingCard) {
     vector<Card*> weaponsList;
     for (int i = 0; i < NUM_WEAPONS; i++) {
         WeaponCard* card = new WeaponCard((WeaponType)i);
@@ -227,6 +247,6 @@ void ComputerPlayer::suggestionDisproved(TypeCollection suggestion, Card* dispro
         if(disprovingCard == locationsList[i])
             locationsList.erase(locationsList.begin()+i);
     }
-
+    
     
 }
