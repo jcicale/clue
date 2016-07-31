@@ -385,6 +385,58 @@ public:
         }
     }
     
+    void WeaponList(){
+        vector<Card*> weaponsList;
+        for (int i = 0; i < NUM_WEAPONS; i++) {
+            WeaponCard* card = new WeaponCard((WeaponType)i);
+            weaponsList.push_back(card);
+        }
+        
+        cout << "Weapons: " << endl;
+        for (int i = 0; i < weaponsList.size(); i++){
+            Card* card = weaponsList[i];
+            WeaponCard* weapon = (WeaponCard*)card;
+            cout <<"\t" << getWeaponTypeString(weapon->weaponType)  << endl;
+
+        }
+
+    }
+    
+    void SuspectList(){
+        vector<Card*> suspectsList;
+        for (int i = 0; i < NUM_CHARACTERS; i++) {
+            SuspectCard* card = new SuspectCard((CharacterType)i);
+            suspectsList.push_back(card);
+        }
+        
+        cout << "Suspects: " << endl;
+        for (int i = 0; i < suspectsList.size(); i++){
+            Card* card = suspectsList[i];
+            SuspectCard* suspect = (SuspectCard*)card;
+            cout <<"\t" << getCharacterTypeString(suspect->characterType)  << endl;
+            
+        }
+
+        
+    }
+    
+    void LocationList(){
+        vector<Card*> locationsList;
+        for (int i = 0; i < NUM_LOCATIONS; i++) {
+            LocationCard* card = new LocationCard((LocationType)i);
+            locationsList.push_back(card);
+        }
+        
+        cout << "Locations: " << endl;
+        for (int i = 0; i < locationsList.size(); i++){
+            Card* card = locationsList[i];
+            LocationCard* location = (LocationCard*)card;
+            cout <<"\t" << getLocationTypeString(location->locationType)  << endl;
+
+        }
+
+    }
+    
 };
 
 class ComputerPlayer : public Player {
