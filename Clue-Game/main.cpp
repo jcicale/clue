@@ -11,12 +11,19 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-# include <ctime>
+#include <ctime>
 #include <cstdlib>
 #include <random>
+#include "Enumerations.h"
+#include "Room.h"
+#include "Board.h"
+#include "Utility.h"
+#include "Player.h"
+#include "Envelope.h"
+#include "Deck.h"
 
-using namespace std;
 
+<<<<<<< HEAD
 enum CardType {
     Weapon,
     Suspect,
@@ -660,15 +667,10 @@ bool isOrderedBefore(Player* playerOne, Player* playerTwo) {
     }
     else return false;
 }
+=======
+>>>>>>> master
 
 int main(int argc, const char * argv[]) {
-    char input;
-    char input1;
-    string killer;
-    string weaponused;
-    string crimescene;
-    string suspect;
-    string suspectedweapon;
     int numberOfComputerPlayers;
     int humanPlayerSelection;
     
@@ -747,16 +749,23 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < players.size(); i ++) {
         players[i]->chooseStartingLocation(clueBoard);
     }
+    fullDeck.dealCards(players);
     while (1) {
         for (int i = 0; i < players.size(); i++) {
             cout << players[i]->name << " is up." << endl;
             TypeCollection* accusation = players[i]->makeAccusation();
             if (accusation != NULL) {
+                if (confidential.checkAccusation(*accusation)) {
+                    cout << "You have correctly identified the killer. You win!" << endl;
+                }
+                else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential.envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential.envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential.envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
+                exit(0);
                 //Check the accusation?
             }
             players[i]->move();
             TypeCollection* suggestion = players[i]->makeSuggestion();
             if (suggestion != NULL) {
+
                 //Check the suggestion?
             }
             cout << players[i]->name << "'s turn has ended. " << players
