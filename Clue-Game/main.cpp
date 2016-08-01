@@ -34,7 +34,27 @@ int main(int argc, const char * argv[]) {
     int humanPlayerSelection;
 
     //user inputs how many computer players will be playing, between 2 and 5
-    cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
+    cout << "Welcome to Clue!" << endl;
+    
+    cout << "\nHere is a list of all of the Weapons, Suspects, and Locations in the game. You may want to copy them for future reference:" << endl;
+    
+    cout << "\nWeapons: " << endl;
+    for(int i=0; i<NUM_WEAPONS; i++){
+        cout << "\t" << getWeaponTypeString((WeaponType)i) << endl;
+    }
+    
+    cout << "\nSuspects: " << endl;
+    for(int i=0; i<NUM_CHARACTERS; i++){
+        cout << "\t" << getCharacterTypeString((CharacterType)i) << endl;
+    }
+    
+    cout << "\nLocations: " << endl;
+    for(int i=0; i<NUM_LOCATIONS; i++){
+        cout << "\t" << getLocationTypeString((LocationType)i) << endl;
+    }
+    
+    cout << "\nFirst, select how many computer players you will be playing against (2-5):" << endl;
+    
     while (1) {
         numberOfComputerPlayers = getIntFromConsole();
         if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
