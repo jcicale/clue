@@ -210,7 +210,7 @@ Card* HumanPlayer::disproveSuggestion(TypeCollection suggestion, Player* current
             return cardsThatDisprove[0];
         }
         else {
-            cout << "You have multiple cards that can disprove this suggestion. Please select which card you would like to use to show " << currentPlayer->name << "."  << endl;
+            cout << "\nYou have multiple cards that can disprove this suggestion. Please select which card you would like to use to show " << currentPlayer->name << "."  << endl;
             for (int i = 0; i < cardsThatDisprove.size(); i++) {
                 Card* card = cardsThatDisprove[i];
                 cout << i << ". " << card->name << endl;
@@ -255,7 +255,7 @@ void ComputerPlayer::chooseStartingLocation(Board* board) {
     }
     if (room != NULL) {
         playerLocation = room;
-        cout << name << " has chosen to start in the " << playerLocation->name << endl;
+        cout << "\n" << name << " has chosen to start in the " << playerLocation->name << endl;
     }
 }
 //this method does nothing because the ComputerPlayer's cards do not need to be printed out

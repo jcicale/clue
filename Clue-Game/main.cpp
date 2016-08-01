@@ -149,7 +149,7 @@ int main(int argc, const char * argv[]) {
             if (accusation != NULL) {
                 //if correct, player wins
                 if (confidential->checkAccusation(*accusation)) {
-                    cout << players[i]->name << " has correctly identified the killer. " << players[i]->name << " wins!" << endl;
+                    cout << "\n" << players[i]->name << " has correctly identified the killer. " << players[i]->name << " wins!" << endl;
                     cout << "This game took " << turns << " turns to complete!"<<endl;
                 }
                 //if incorrect, player loses and game ends
@@ -179,16 +179,16 @@ int main(int argc, const char * argv[]) {
                 }
                 //if no one can disprove current player, they have the option to make an accusation
                 if (disproved == false) {
-                    cout << players[i]->name <<"'s suggestion has not been disproved. " << players[i]->name << " has the chance to make an accusation." << endl;
-                    players[i]->makeAccusation();
+                    cout << "\n" << players[i]->name <<"'s suggestion has not been disproved. " << players[i]->name << " has the chance to make an accusation." << endl;
+                    accusation = players[i]->makeAccusation();
                     if (accusation != NULL) {
                         //if correct, player wins
                         if (confidential->checkAccusation(*accusation)) {
-                            cout << players[i]->name << " has correctly identified the killer. " << players[i]->name << " wins!" << endl;
+                            cout << "\n" << players[i]->name << " has correctly identified the killer. " << players[i]->name << " wins!" << endl;
                             cout << "This game took " << turns << " turns to complete!"<<endl;
                         }
                         //if incorrect, player loses and game ends
-                        else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
+                        else cout << "\nYour accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
                         gameWon = true;
                         break;
                     }
