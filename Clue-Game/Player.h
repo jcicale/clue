@@ -23,34 +23,45 @@ public:
     Room* playerLocation;
     vector<Card*> playersCards;
     Player(CharacterType type);
+    ~Player();
+    vector<WeaponCard*> weaponsList;
+    vector<SuspectCard*> suspectsList;
+    vector<LocationCard*> locationsList;
     virtual void chooseStartingLocation(Board board);
+    virtual void printOutCards();
+    virtual void removePlayersCardsFromList(vector<Card*> playersCards);
     virtual void move();
     virtual TypeCollection* makeAccusation();
     virtual TypeCollection* makeSuggestion();
-    virtual Card* disproveSuggestion(TypeCollection suggestion);
-    virtual void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    virtual Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
+    virtual void suggestionDisproved(Player* player, Card* disprovingCard);
+
 };
 
 class HumanPlayer : public Player {
 public:
     HumanPlayer(CharacterType type);
     void chooseStartingLocation(Board board);
+    void printOutCards();
+    void removePlayersCardsFromList(vector<Card*> playersCards);
     void move();
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
-    Card* disproveSuggestion(TypeCollection suggestion);
-    void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
+    void suggestionDisproved(Player* player, Card* disprovingCard);
 };
 
 class ComputerPlayer : public Player {
 public:
     ComputerPlayer(CharacterType type);
     void chooseStartingLocation(Board board);
+    void printOutCards();
+    void removePlayersCardsFromList(vector<Card*> playersCards);
     void move();
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
-    Card* disproveSuggestion(TypeCollection suggestion);
-    void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
+    void suggestionDisproved(Player* player, Card* disprovingCard);
 
 };
 
@@ -60,6 +71,13 @@ inline bool isOrderedBefore(Player* playerOne, Player* playerTwo) {
         return true;
     }
     else return false;
+}
+
+inline Player* findPlayerWithIdentity(vector<Player*> players, CharacterType identity) {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->identity == identity) return players[i];
+    }
+    return NULL;
 }
 
 #endif /* Player_h */

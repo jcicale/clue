@@ -18,6 +18,7 @@ class Card {
 public:
     CardType type;
     Card(CardType t);
+    string name;
 };
 
 class WeaponCard : public Card {
@@ -38,7 +39,7 @@ public:
     LocationCard(LocationType type);
 };
 
-//global function to print cards
+//function to print cards
 inline void printCards(vector<Card*> cards) {
     for (int i = 0; i < cards.size(); i++) {
         Card* card = cards[i];

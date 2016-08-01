@@ -21,6 +21,7 @@ public:
     void debugPrint();
     
     Board();
+    ~Board();
     void movePlayerToRoom(Player* player, LocationType location);
 };
 

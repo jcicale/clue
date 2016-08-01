@@ -43,6 +43,7 @@
 		494CA1D11D4D59FF00AF8BE3 /* Envelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Envelope.h; sourceTree = "<group>"; };
 		494CA1D31D4D5B0F00AF8BE3 /* Deck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Deck.cpp; sourceTree = "<group>"; };
 		494CA1D41D4D5B0F00AF8BE3 /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deck.h; sourceTree = "<group>"; };
+		494CA1D71D4D67EF00AF8BE3 /* CLL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLL.h; sourceTree = "<group>"; };
 		49886BA51D3A9FB500E237C4 /* Clue-Game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Clue-Game"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49886BA81D3A9FB500E237C4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,6 +93,7 @@
 				494CA1C61D4D42E300AF8BE3 /* Board.cpp */,
 				494CA1C71D4D42E300AF8BE3 /* Board.h */,
 				494CA1C91D4D514D00AF8BE3 /* Utility.h */,
+				494CA1D71D4D67EF00AF8BE3 /* CLL.h */,
 			);
 			path = "Clue-Game";
 			sourceTree = "<group>";
