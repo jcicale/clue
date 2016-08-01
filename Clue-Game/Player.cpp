@@ -69,7 +69,7 @@ HumanPlayer::HumanPlayer(CharacterType type) : Player(type) {}
 //user is allowed to select which room to start in (each character type can start in one of two rooms)
 void HumanPlayer::chooseStartingLocation(Board* board) {
     StartingLocations startingLocations = getStartingLocations(identity);
-    cout << name << " can start in the " << endl;
+    cout << "\n" << name << " can start in the " << endl;
     cout << startingLocations.choiceOne << ". " << getLocationTypeString(startingLocations.choiceOne) << endl;
     cout << startingLocations.choiceTwo << ". " << getLocationTypeString(startingLocations.choiceTwo) << endl;
     int selectedLocation;
@@ -89,7 +89,7 @@ void HumanPlayer::chooseStartingLocation(Board* board) {
 }
 //method to print out HumanPlayer's card at the beginning of each turn for reference
 void HumanPlayer::printOutCards() {
-    cout << "You have the following cards: " << endl;
+    cout << "\nYou have the following cards: " << endl;
     for (int i = 0; i < playersCards.size(); i++){
         cout << i+1 << ". " << playersCards[i]->name << endl;
     }
@@ -99,7 +99,7 @@ void HumanPlayer::removePlayersCardsFromList() {}
 //method to move the HumanPlayer around the board; movement is based on connected rooms (each room has either two or three connected rooms to move to). This method updates the playerLocation property.
 void HumanPlayer::move(){
     int newLocation;
-    cout << "You are currently in the " << playerLocation->name << "." << endl;
+    cout << "\nYou are currently in the " << playerLocation->name << "." << endl;
     cout << "From here, you can move to the " << endl;
     for (int i = 0; i < playerLocation->connectedRooms.size(); i++) {
         LocationType currentRoomIdentity = playerLocation->connectedRooms[i]->identity;
@@ -118,7 +118,7 @@ void HumanPlayer::move(){
 }
 //method for HumanPlayer to make an accusation; returns a TypeCollection pointer if user wants to make an accusation, else returns NULL
 TypeCollection* HumanPlayer::makeAccusation() {
-    cout << "Would you like to make an accusation?" << endl;
+    cout << "\nWould you like to make an accusation?" << endl;
     cout << "1. Yes" << endl;
     cout << "2. No" << endl;
     int response;
@@ -152,7 +152,7 @@ TypeCollection* HumanPlayer::makeAccusation() {
 }
 //method for HumanPlayer to make a suggestion; returns a TypeCollection pointer if user wants to make an suggestion, else returns NULL. Location MUST be the player's current location, the other two TypeCollection properties are selected by the user
 TypeCollection* HumanPlayer::makeSuggestion() {
-    cout << "Would you like to make a suggestion in the " << playerLocation->name << "?" << endl;
+    cout << "\nWould you like to make a suggestion in the " << playerLocation->name << "?" << endl;
     cout << "1. Yes" << endl;
     cout << "2. No" << endl;
     int response;
