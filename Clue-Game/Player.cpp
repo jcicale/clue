@@ -404,6 +404,3 @@ void ComputerPlayer::cheat(Envelope* envelope) {
     }
 }
 
-
-
-
