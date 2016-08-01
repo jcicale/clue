@@ -30,7 +30,6 @@ Player::Player(CharacterType type) {
     }
 }
 Player::~Player() {
-    cout<<"DELETEING PLAYER";
     for (int i = 0; i < locationsList.size(); i++) {
         delete locationsList[i];
     }
@@ -45,10 +44,11 @@ Player::~Player() {
     }
 }
 //virtual methods, implemented below for HumanPlayer and ComputerPlayer
-void Player::chooseStartingLocation(Board board) {}
+void Player::chooseStartingLocation(Board* board) {}
 void Player::printOutCards() {}
-void Player::removePlayersCardsFromList(vector<Card*> playersCards) {}
+void Player::removePlayersCardsFromList() { }
 void Player::move() {}
+void Player::cheat(Envelope* envelope) {} 
 //these return NULL just in case somehow a Player without a subclass is created
 TypeCollection* Player::makeAccusation() {
     return NULL;
@@ -67,7 +67,7 @@ void Player::suggestionDisproved(Player* player, Card* disprovingCard) {
 HumanPlayer::HumanPlayer(CharacterType type) : Player(type) {}
 //METHODS
 //user is allowed to select which room to start in (each character type can start in one of two rooms)
-void HumanPlayer::chooseStartingLocation(Board board) {
+void HumanPlayer::chooseStartingLocation(Board* board) {
     StartingLocations startingLocations = getStartingLocations(identity);
     cout << name << " can start in the " << endl;
     cout << startingLocations.choiceOne << ". " << getLocationTypeString(startingLocations.choiceOne) << endl;
@@ -76,7 +76,7 @@ void HumanPlayer::chooseStartingLocation(Board board) {
     while(1) {
         selectedLocation = getIntFromConsole();
         if ((LocationType)selectedLocation == startingLocations.choiceOne || (LocationType)selectedLocation == startingLocations.choiceTwo) {
-            Room* room = findRoomWithIdentity((LocationType)selectedLocation, board.rooms);
+            Room* room = findRoomWithIdentity((LocationType)selectedLocation, board->rooms);
             if (room != NULL) {
                 playerLocation = room;
                 break;
@@ -95,7 +95,7 @@ void HumanPlayer::printOutCards() {
     }
 }
 //leaving blank for now as CP lists are more important
-void HumanPlayer::removePlayersCardsFromList(vector<Card*> playersCards) {}
+void HumanPlayer::removePlayersCardsFromList() {}
 //method to move the HumanPlayer around the board; movement is based on connected rooms (each room has either two or three connected rooms to move to). This method updates the playerLocation property.
 void HumanPlayer::move(){
     int newLocation;
@@ -235,21 +235,22 @@ Card* HumanPlayer::disproveSuggestion(TypeCollection suggestion, Player* current
 void HumanPlayer::suggestionDisproved(Player* player, Card* disprovingCard) {
     cout << player->name << " has proved your suggestion wrong by showing you " << disprovingCard->name << endl;
 }
+void HumanPlayer::cheat(Envelope* envelope) {}
 
 //ComputerPlayer subclass implementation
 //CONSTRUCTOR
 ComputerPlayer::ComputerPlayer(CharacterType type) : Player(type) {}
 //METHODS
 //ComputerPlayer selects which room to start in by picking a random number, one of two(each character type can start in one of two rooms)
-void ComputerPlayer::chooseStartingLocation(Board board) {
+void ComputerPlayer::chooseStartingLocation(Board* board) {
     StartingLocations startingLocations = getStartingLocations(identity);
     int selectedLocation = getRandomNumber(1);
     Room *room;
     if (selectedLocation == 0) {
-        room = findRoomWithIdentity(startingLocations.choiceOne, board.rooms);
+        room = findRoomWithIdentity(startingLocations.choiceOne, board->rooms);
     }
     else if (selectedLocation == 1) {
-        room = findRoomWithIdentity(startingLocations.choiceTwo, board.rooms);
+        room = findRoomWithIdentity(startingLocations.choiceTwo, board->rooms);
     }
     if (room != NULL) {
         playerLocation = room;
@@ -259,7 +260,7 @@ void ComputerPlayer::chooseStartingLocation(Board board) {
 //this method does nothing because the ComputerPlayer's cards do not need to be printed out
 void ComputerPlayer::printOutCards() {}
 //this method removes the cards that the ComputerPlayer has been dealt from their lists
-void ComputerPlayer::removePlayersCardsFromList(vector<Card*> playersCards){
+void ComputerPlayer::removePlayersCardsFromList(){
     for (int i = 0; i <playersCards.size(); i++) {
         Card* currentCard = playersCards[i];
         if (playersCards[i]->type == Weapon) {
@@ -294,7 +295,6 @@ void ComputerPlayer::removePlayersCardsFromList(vector<Card*> playersCards){
 }
 //method to move the ComputerPlayer around the board; movement is based on connected rooms (each room has either two or three connected rooms to move to) so ComputerPlayer picks a random number to correspond to which room to move to. This method updates the playerLocation property.
 void ComputerPlayer::move() {
-    
     vector<Room*> possibleRooms;
     for (int i = 0; i < locationsList.size(); i++) {
         LocationType targetLocation = locationsList[i]->locationType;
@@ -388,6 +388,21 @@ void ComputerPlayer::suggestionDisproved(Player* player, Card* disprovingCard) {
     }
 }
 
+void ComputerPlayer::cheat(Envelope* envelope) {
+
+    int randomNumber = getRandomNumber(3);
+    
+    if (randomNumber == 0) {
+        locationsList.erase(locationsList.begin(), locationsList.end());
+        locationsList.push_back(new LocationCard(envelope->envelopeCards.locationUsed));
+    } else if (randomNumber == 1) {
+        weaponsList.erase(weaponsList.begin(), weaponsList.end());
+        weaponsList.push_back(new WeaponCard(envelope->envelopeCards.weaponUsed));
+    } else if (randomNumber == 2) {
+        suspectsList.erase(suspectsList.begin(), suspectsList.end());
+        suspectsList.push_back(new SuspectCard(envelope->envelopeCards.suspectUsed));
+    }
+}
 
 
 

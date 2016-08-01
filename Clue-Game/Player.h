@@ -15,6 +15,7 @@
 #include <vector>
 #include "Card.h"
 #include "Board.h"
+#include "Envelope.h"
 
 class Player {
 public:
@@ -27,9 +28,10 @@ public:
     vector<WeaponCard*> weaponsList;
     vector<SuspectCard*> suspectsList;
     vector<LocationCard*> locationsList;
-    virtual void chooseStartingLocation(Board board);
+    virtual void chooseStartingLocation(Board* board);
     virtual void printOutCards();
-    virtual void removePlayersCardsFromList(vector<Card*> playersCards);
+    virtual void removePlayersCardsFromList();
+    virtual void cheat(Envelope* envelope);
     virtual void move();
     virtual TypeCollection* makeAccusation();
     virtual TypeCollection* makeSuggestion();
@@ -41,28 +43,29 @@ public:
 class HumanPlayer : public Player {
 public:
     HumanPlayer(CharacterType type);
-    void chooseStartingLocation(Board board);
+    void chooseStartingLocation(Board* board);
     void printOutCards();
-    void removePlayersCardsFromList(vector<Card*> playersCards);
+    void removePlayersCardsFromList();
     void move();
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
     Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
     void suggestionDisproved(Player* player, Card* disprovingCard);
+    void cheat(Envelope* envelope);
 };
 
 class ComputerPlayer : public Player {
 public:
     ComputerPlayer(CharacterType type);
-    void chooseStartingLocation(Board board);
+    void chooseStartingLocation(Board* board);
     void printOutCards();
-    void removePlayersCardsFromList(vector<Card*> playersCards);
+    void removePlayersCardsFromList();
     void move();
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
     Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
     void suggestionDisproved(Player* player, Card* disprovingCard);
-
+    void cheat(Envelope* envelope);
 };
 
 //function to compare the order of two players; returns true if playerOne goes before playerTwo, otherwise false

@@ -22,49 +22,36 @@
 #include "Envelope.h"
 #include "Deck.h"
 
-int main(int argc, const char * argv[]) {
-    int numberOfComputerPlayers;
-    int humanPlayerSelection;
+int playGame(int numberOfComputerPlayers) {
     //creates the board
-    Board clueBoard;
+    Board* clueBoard = new Board;
     //creates empty vector of player pointers
     vector<Player*> players;
-    //user inputs how many computer players will be playing, between 2 and 5
-    cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
-    while (1) {
-        numberOfComputerPlayers = getIntFromConsole();
-        if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
-            break;
-        }
-        else {
-            cout << "Not a valid number. Please enter a number between 2 and 5." << endl;
-        }
-    }
-    //user selects his/her character type from list of character type enumeration
-    cout << "Which character would you like to be (enter player number): " << endl;
-    for (int i = 0; i < NUM_CHARACTERS; i++) {
-        cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
-    }
-    //user's character is added to players vector
-    while(1) {
-        humanPlayerSelection = getIntFromConsole(); //this method ensures no bad entries (ie chars) from console
-        if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_CHARACTERS) {
-            CharacterType selectedType = (CharacterType)humanPlayerSelection;
-            Player* player = new HumanPlayer(selectedType);
-            players.push_back(player);
-            break;
-        }
-        else {
-            cout << "Not a valid number. Please enter a valid character number." << endl;
-        }
-    }
-    cout << "You chose " << players[0]->name << endl;
+    //    //user selects his/her character type from list of character type enumeration
+    //    cout << "Which character would you like to be (enter player number): " << endl;
+    //    for (int i = 0; i < NUM_CHARACTERS; i++) {
+    //        cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
+    //    }
+    //    //user's character is added to players vector
+    //    while(1) {
+    //        humanPlayerSelection = getIntFromConsole(); //this method ensures no bad entries (ie chars) from console
+    //        if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_CHARACTERS) {
+    //            CharacterType selectedType = (CharacterType)humanPlayerSelection;
+    //            Player* player = new HumanPlayer(selectedType);
+    //            players.push_back(player);
+    //            break;
+    //        }
+    //        else {
+    //            cout << "Not a valid number. Please enter a valid character number." << endl;
+    //        }
+    //    }
+    //    cout << "You chose " << players[0]->name << endl;
     //all remaining character types are added to a temporary vector
     vector<int> charactersLeftToPick;
     for (int i = 0; i < NUM_CHARACTERS; i ++) {
-        if (i != humanPlayerSelection) {
+//        if (i != humanPlayerSelection) {
             charactersLeftToPick.push_back(i);
-        }
+//        }
     }
     //temporary vector is shuffled
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -94,7 +81,7 @@ int main(int argc, const char * argv[]) {
     CharacterType suspectUsed = suspectDeck.getRandomCard()->characterType;
     LocationType locationUsed = locationDeck.getRandomCard()->locationType;
     //creates the Envelope with the three killer cards
-    Envelope confidential(weaponUsed, suspectUsed, locationUsed);
+    Envelope *confidential = new Envelope(weaponUsed, suspectUsed, locationUsed);
     //creates the full Deck with all Card Types
     Deck fullDeck(weaponDeck, suspectDeck, locationDeck);
     
@@ -106,7 +93,8 @@ int main(int argc, const char * argv[]) {
     fullDeck.dealCards(players);
     //removes the cards from the list of weapons/suspects/locations
     for (int i = 0; i < players.size(); i++) {
-        players[i]->removePlayersCardsFromList(players[i]->playersCards);
+        players[i]->removePlayersCardsFromList();
+        players[i]->cheat(confidential);
     }
     
     //Gameplay
@@ -125,12 +113,12 @@ int main(int argc, const char * argv[]) {
             //if an accusation is made, it will be checked against the envelope
             if (accusation != NULL) {
                 //if correct, player wins
-                if (confidential.checkAccusation(*accusation)) {
+                if (confidential->checkAccusation(*accusation)) {
                     cout << players[i]->name << " has correctly identified the killer. They win!" << endl;
                     cout << "It only took them......." << turns << "!!!!"<<endl;
                 }
                 //if incorrect, player loses and game ends
-                else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential.envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential.envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential.envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
+                else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
                 gameWon = true;
                 break;
             }
@@ -141,7 +129,7 @@ int main(int argc, const char * argv[]) {
             if (suggestion != NULL) {
                 //if a suggestion is made, move the suggested character to the suggested room
                 Player* suggestedPlayer = findPlayerWithIdentity(players, suggestion->suspectUsed);
-                clueBoard.movePlayerToRoom(suggestedPlayer, suggestion->locationUsed);
+                clueBoard->movePlayerToRoom(suggestedPlayer, suggestion->locationUsed);
                 //if a suggestion is made, iterate through players starting with player AFTER current player
                 for (int j = i+1; j < players.size()+i; j++) {
                     //check if any players can disprove the suggestion with one of their cards
@@ -165,6 +153,37 @@ int main(int argc, const char * argv[]) {
         delete players[i];
     }
     
+    delete clueBoard;
+    delete confidential;
+    return turns;
+    
+}
+
+
+int main(int argc, const char * argv[]) {
+    int numberOfComputerPlayers;
+    int humanPlayerSelection;
+
+    //user inputs how many computer players will be playing, between 2 and 5
+    cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
+    while (1) {
+        numberOfComputerPlayers = getIntFromConsole();
+        if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
+            break;
+        }
+        else {
+            cout << "Not a valid number. Please enter a number between 2 and 5." << endl;
+        }
+    }
+    
+    int numberOfGames = 1000;
+    int turns = 0;
+    while (numberOfGames > 0) {
+        turns += playGame(numberOfComputerPlayers);
+        numberOfGames--;
+    }
+    
+    cout << "They played 1000 games with an average of " << turns / 1000 << " per game" << endl;
     
     return 0;
 }
