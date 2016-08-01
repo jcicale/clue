@@ -63,7 +63,7 @@ int main(int argc, const char * argv[]) {
     //creates empty vector of player pointers
     vector<Player*> players;
         //user selects his/her character type from list of character type enumeration
-        cout << "Which character would you like to be (enter player number): " << endl;
+        cout << "\nWhich character would you like to be (enter player number): " << endl;
         for (int i = 0; i < NUM_CHARACTERS; i++) {
             cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
         }
@@ -80,7 +80,7 @@ int main(int argc, const char * argv[]) {
                 cout << "Not a valid number. Please enter a valid character number." << endl;
             }
         }
-        cout << "You chose " << players[0]->name << endl;
+        cout << "\nYou chose " << players[0]->name << endl;
     //all remaining character types are added to a temporary vector
     vector<int> charactersLeftToPick;
     for (int i = 0; i < NUM_CHARACTERS; i ++) {
@@ -102,7 +102,7 @@ int main(int argc, const char * argv[]) {
     sort(players.begin(), players.end(), isOrderedBefore);
     
     //shows who is playing
-    cout << "This game's players are: " << endl;
+    cout << "\nThis game's players are: " << endl;
     for (int i = 0; i < players.size(); i++) {
         cout << players[i]->name << endl;
     }
@@ -142,7 +142,7 @@ int main(int argc, const char * argv[]) {
             //prints the user's cards for reference
             players[i]->printOutCards();
             //prints whose turn it is
-            cout << players[i]->name << " is up." << endl;
+            cout << "\n" << players[i]->name << " is up." << endl;
             //player can make an accusation or not
             TypeCollection* accusation = players[i]->makeAccusation();
             //if an accusation is made, it will be checked against the envelope
@@ -177,9 +177,22 @@ int main(int argc, const char * argv[]) {
                         break;
                     }
                 }
+                //if no one can disprove current player, they have the option to make an accusation
                 if (disproved == false) {
                     cout << players[i]->name <<"'s suggestion has not been disproved. " << players[i]->name << " has the chance to make an accusation." << endl;
                     players[i]->makeAccusation();
+                    if (accusation != NULL) {
+                        //if correct, player wins
+                        if (confidential->checkAccusation(*accusation)) {
+                            cout << players[i]->name << " has correctly identified the killer. " << players[i]->name << " wins!" << endl;
+                            cout << "This game took " << turns << " turns to complete!"<<endl;
+                        }
+                        //if incorrect, player loses and game ends
+                        else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
+                        gameWon = true;
+                        break;
+                    }
+
                 }
                 delete suggestion;
             }
