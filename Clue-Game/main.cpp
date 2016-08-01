@@ -22,12 +22,6 @@
 #include "Envelope.h"
 #include "Deck.h"
 
-int playGame(int numberOfComputerPlayers) {
-
-    return 0;
-    
-}
-
 
 int main(int argc, const char * argv[]) {
     int numberOfComputerPlayers;
@@ -172,17 +166,20 @@ int main(int argc, const char * argv[]) {
                 Player* suggestedPlayer = findPlayerWithIdentity(players, suggestion->suspectUsed);
                 clueBoard->movePlayerToRoom(suggestedPlayer, suggestion->locationUsed);
                 //if a suggestion is made, iterate through players starting with player AFTER current player
+                bool disproved = false;
                 for (int j = i+1; j < players.size()+i; j++) {
                     //check if any players can disprove the suggestion with one of their cards
-                    Card *card = players[j%players.size()]->disproveSuggestion(*suggestion, players[i]);
+                    Card* card = players[j%players.size()]->disproveSuggestion(*suggestion, players[i]);
                     if (card != NULL) {
                         //if they can, player who made the suggestion will be shown the card that disproves it
+                        disproved = true;
                         players[i]->suggestionDisproved(players[j%players.size()], card);
                         break;
-                    } else if (card == NULL) {
-                        cout << "Suggestions have not been disproved. " << players[i]->makeAccusation();
-                        break;
                     }
+                }
+                if (disproved == false) {
+                    cout << players[i]->name <<"'s suggestion has not been disproved. " << players[i]->name << " has the chance to make an accusation." << endl;
+                    players[i]->makeAccusation();
                 }
                 delete suggestion;
             }
