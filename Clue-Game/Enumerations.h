@@ -13,14 +13,16 @@
 
 using namespace std;
 
+//Enumeration for the three types of cards
 enum CardType {
     Weapon,
     Suspect,
     Location
 };
 
+//constant number of weapons
 #define NUM_WEAPONS 6
-
+//Enumeration for the six types of weapons
 enum WeaponType {
     Candlestick,
     Knife,
@@ -29,7 +31,7 @@ enum WeaponType {
     Rope,
     Wrench
 };
-
+//function used to access a string corresponding to each weapon type
 inline string getWeaponTypeString(WeaponType type) {
     switch (type) {
         case Candlestick:
@@ -47,8 +49,9 @@ inline string getWeaponTypeString(WeaponType type) {
     }
 }
 
+//constant number of characters
 #define NUM_CHARACTERS 6
-
+//enumeration for the six types of characters
 enum CharacterType {
     Scarlet,
     Mustard,
@@ -57,7 +60,7 @@ enum CharacterType {
     Peacock,
     Plum
 };
-
+//function used to access a string corresponding to each character type
 inline string getCharacterTypeString(CharacterType type) {
     switch (type) {
         case Scarlet:
@@ -75,8 +78,9 @@ inline string getCharacterTypeString(CharacterType type) {
     }
 }
 
+//constant number of locations
 #define NUM_LOCATIONS 9
-
+//enumeration for the nine different types of location
 enum LocationType {
     Kitchen,
     Ballroom,
@@ -88,7 +92,7 @@ enum LocationType {
     Lounge,
     DiningRoom
 };
-
+//function used to access a string corresponding to each location type
 inline string getLocationTypeString(LocationType type) {
     switch (type) {
         case Kitchen:
@@ -112,11 +116,12 @@ inline string getLocationTypeString(LocationType type) {
     }
 };
 
+//choice of two starting locations
 struct StartingLocations {
     LocationType choiceOne;
     LocationType choiceTwo;
 };
-
+//function that assigns starting locations based on CharacterType enumeration
 inline StartingLocations getStartingLocations(CharacterType character) {
     StartingLocations startingLocations;
     switch (character) {

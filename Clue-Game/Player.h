@@ -15,6 +15,7 @@
 #include <vector>
 #include "Card.h"
 #include "Board.h"
+#include "Envelope.h"
 
 class Player {
 public:
@@ -23,35 +24,48 @@ public:
     Room* playerLocation;
     vector<Card*> playersCards;
     Player(CharacterType type);
-    virtual void chooseStartingLocation(Board board);
+    ~Player();
+    vector<WeaponCard*> weaponsList;
+    vector<SuspectCard*> suspectsList;
+    vector<LocationCard*> locationsList;
+    virtual void chooseStartingLocation(Board* board);
+    virtual void printOutCards();
+    virtual void removePlayersCardsFromList();
+    virtual void cheat(Envelope* envelope);
     virtual void move();
     virtual TypeCollection* makeAccusation();
     virtual TypeCollection* makeSuggestion();
-    virtual Card* disproveSuggestion(TypeCollection suggestion);
-    virtual void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    virtual Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
+    virtual void suggestionDisproved(Player* player, Card* disprovingCard);
+
 };
 
 class HumanPlayer : public Player {
 public:
     HumanPlayer(CharacterType type);
-    void chooseStartingLocation(Board board);
+    void chooseStartingLocation(Board* board);
+    void printOutCards();
+    void removePlayersCardsFromList();
     void move();
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
-    Card* disproveSuggestion(TypeCollection suggestion);
-    void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
+    Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
+    void suggestionDisproved(Player* player, Card* disprovingCard);
+    void cheat(Envelope* envelope);
 };
 
 class ComputerPlayer : public Player {
 public:
     ComputerPlayer(CharacterType type);
-    void chooseStartingLocation(Board board);
+    void chooseStartingLocation(Board* board);
+    void printOutCards();
+    void removePlayersCardsFromList();
     void move();
     TypeCollection* makeAccusation();
     TypeCollection* makeSuggestion();
-    Card* disproveSuggestion(TypeCollection suggestion);
-    void suggestionDisproved(TypeCollection suggestion, Card* disprovingCard);
-
+    Card* disproveSuggestion(TypeCollection suggestion, Player* currentPlayer);
+    void suggestionDisproved(Player* player, Card* disprovingCard);
+    void cheat(Envelope* envelope);
 };
 
 //function to compare the order of two players; returns true if playerOne goes before playerTwo, otherwise false
@@ -60,6 +74,13 @@ inline bool isOrderedBefore(Player* playerOne, Player* playerTwo) {
         return true;
     }
     else return false;
+}
+
+inline Player* findPlayerWithIdentity(vector<Player*> players, CharacterType identity) {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->identity == identity) return players[i];
+    }
+    return NULL;
 }
 
 #endif /* Player_h */

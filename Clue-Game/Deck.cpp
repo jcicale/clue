@@ -9,7 +9,7 @@
 #include "Deck.h"
 #include <random>
 
-
+//CONSTRUCTOR
 //constructs and shuffles the WeaponDeck
 WeaponDeck::WeaponDeck() {
     for(int i = 0; i<NUM_WEAPONS; i++){
@@ -19,6 +19,7 @@ WeaponDeck::WeaponDeck() {
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(weaponCards.begin(), weaponCards.end(), default_random_engine((unsigned)seed));
 }
+//METHODS
 //returns a random card from the weapon deck, used for making the envelope
 WeaponCard* WeaponDeck::getRandomCard() {
     WeaponCard* randomWeaponCard = weaponCards.back();
@@ -36,7 +37,7 @@ void WeaponDeck::printWeaponDeck(){
     }
 }
 
-
+//CONSTRUCTOR
 //constructs and shuffles the SuspectDeck
 SuspectDeck::SuspectDeck() {
     for(int i = 0; i<NUM_CHARACTERS; i++){
@@ -46,6 +47,7 @@ SuspectDeck::SuspectDeck() {
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(suspectCards.begin(), suspectCards.end(), default_random_engine((unsigned)seed));
 }
+//METHODS
 //returns a random card from the suspect deck, used for making the envelope
 SuspectCard* SuspectDeck::getRandomCard(){
     SuspectCard* randomSuspectCard = suspectCards.back();
@@ -63,7 +65,7 @@ void SuspectDeck::printSuspectDeck(){
     }
 }
 
-
+//CONSTRUCTOR
 //constructs and shuffles the LocationDeck
 LocationDeck::LocationDeck() {
     for(int i = 0; i<NUM_LOCATIONS; i++){
@@ -73,6 +75,7 @@ LocationDeck::LocationDeck() {
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(locationCards.begin(), locationCards.end(), default_random_engine((unsigned)seed));
 }
+//METHODS
 //returns a random card from the location deck, used for making the envelope
 LocationCard* LocationDeck::getRandomCard(){
     LocationCard* randomLocationCard = locationCards.back();
@@ -90,7 +93,7 @@ void LocationDeck::printLocationDeck(){
     }
 }
 
-
+//CONSTRUCTOR
 //constructs the Deck from the cards left in each Type Deck after selecting the killer cards
 Deck::Deck(WeaponDeck weaponDeck, SuspectDeck suspectDeck, LocationDeck locationDeck) {
     for (int i = 0; i < weaponDeck.weaponCards.size(); i++) {
@@ -105,6 +108,7 @@ Deck::Deck(WeaponDeck weaponDeck, SuspectDeck suspectDeck, LocationDeck location
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(cards.begin(), cards.end(), default_random_engine((unsigned)seed));
 }
+//METHODS
 //deals cards out to players
 void Deck::dealCards(vector<Player*> players) {
     while (!cards.empty()) {

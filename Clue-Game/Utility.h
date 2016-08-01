@@ -35,7 +35,7 @@ inline int getRandomNumber(int max) {
     return distr(eng);
 }
 
-//allows getRandomNumber function to work using the size of array as a parameter
+//allows getRandomNumber function to work using the size of array as a parameter by casting unsigned long as int
 inline int getRandomNumber(unsigned long max) {
     return getRandomNumber((int)max);
 }

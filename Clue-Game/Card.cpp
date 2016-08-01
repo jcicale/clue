@@ -8,23 +8,28 @@
 
 #include "Card.h"
 
-
+//CONSTRUCTOR
 Card::Card(CardType t) {
     type = t;
 }
 
-
+//WeaponCard Subclass Implementation
+//CONSTRUCTOR
 WeaponCard::WeaponCard(WeaponType type) : Card(Weapon) {
     weaponType = type;
+    name = getWeaponTypeString(type);
 }
-
+//SuspectCard Subclass Implementation
+//CONSTRUCTOR
 SuspectCard::SuspectCard(CharacterType type) : Card(Suspect) {
     characterType = type;
+    name = getCharacterTypeString(type);
 }
-
-
+//LocationCard Subclass Implementation
+//CONSTRUCTOR
 LocationCard::LocationCard(LocationType type) : Card(Location) {
     locationType = type;
+    name = getLocationTypeString(type);
 }
 
 

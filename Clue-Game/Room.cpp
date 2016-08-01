@@ -12,10 +12,17 @@
 #include <string>
 #include <iostream>
 
+//CONSTRUCTOR
+Room::Room(LocationType type) {
+    name = getLocationTypeString(type);
+    identity = type;
+}
+//METHODS
+//adds connected rooms to the vector connected rooms
 void Room::addConnectedRoom(Room* room) {
     connectedRooms.push_back(room);
 }
-
+//prints the name of the room and what it is connected to
 void Room::debugPrint() {
     cout << "This room is the " << name << endl;
     cout << "It is connected to the ";
@@ -25,8 +32,4 @@ void Room::debugPrint() {
     cout << endl;
 }
 
-Room::Room(LocationType type) {
-    name = getLocationTypeString(type);
-    identity = type;
-}
 
