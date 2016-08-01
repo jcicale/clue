@@ -203,6 +203,7 @@ Card* HumanPlayer::disproveSuggestion(TypeCollection suggestion, Player* current
             }
         }
     }
+    
     if (!cardsThatDisprove.empty()) {
         if (cardsThatDisprove.size() == 1) {
             cout << "You have one card that can disprove the suggestion. It is the " << cardsThatDisprove[0]->name << ". This card will be shown to  " << currentPlayer->name << "." << endl;
@@ -358,7 +359,6 @@ Card* ComputerPlayer::disproveSuggestion(TypeCollection suggestion, Player* curr
             if(locationCard->locationType == suggestion.locationUsed) return locationCard;
         }
     }
-    
     return NULL;
 }
 //if a card from another player has disproved ComputerPlayer's suggestion, this method remove the disprovingCard from their list

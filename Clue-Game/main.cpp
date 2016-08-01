@@ -179,10 +179,14 @@ int main(int argc, const char * argv[]) {
                         //if they can, player who made the suggestion will be shown the card that disproves it
                         players[i]->suggestionDisproved(players[j%players.size()], card);
                         break;
+                    } else if (card == NULL) {
+                        cout << "Suggestions have not been disproved. " << players[i]->makeAccusation();
+                        break;
                     }
                 }
                 delete suggestion;
             }
+
             //player's turn ends, informs user what room they ended up in
             cout << players[i]->name << "'s turn has ended. " << players
             [i]->name << " is in the " << players[i]->playerLocation->name << endl << endl;
