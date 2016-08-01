@@ -363,7 +363,7 @@ Card* ComputerPlayer::disproveSuggestion(TypeCollection suggestion, Player* curr
 }
 //if a card from another player has disproved ComputerPlayer's suggestion, this method remove the disprovingCard from their list
 void ComputerPlayer::suggestionDisproved(Player* player, Card* disprovingCard) {
-    
+    cout << player->name << " has disproved " << name << "'s suggestion." << endl;
     if (disprovingCard->type == Weapon) {
         WeaponCard* disprovingWeaponCard = (WeaponCard*)disprovingCard;
         for(int i=0; i<weaponsList.size(); i++) {

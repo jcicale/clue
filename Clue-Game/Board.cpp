@@ -64,16 +64,18 @@ Board::Board() {
     diningRoom->addConnectedRoom(kitchen);
 }
 Board::~Board() {
-//    cout << "DELETING BOARD";
-//    for (int i = 0; i < rooms.size(); i++) {
-//        delete rooms[i];
-//    }
+    for (int i = 0; i < rooms.size(); i++) {
+        delete rooms[i];
+    }
 }
 //if a player is called in a suggestion, this method moves them to the location where the suggestion took place
 void Board::movePlayerToRoom(Player* player, LocationType location) {
     if (player == NULL) return;
     Room* targetRoom = findRoomWithIdentity(location, rooms);
     if (targetRoom == NULL) return ;
+    
+    if (targetRoom == player->playerLocation) return;
+    
     player->playerLocation=targetRoom;
     cout << player->name << " was moved to the " << targetRoom->name << "." << endl;
 }

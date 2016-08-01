@@ -23,35 +23,56 @@
 #include "Deck.h"
 
 int playGame(int numberOfComputerPlayers) {
+
+    return 0;
+    
+}
+
+
+int main(int argc, const char * argv[]) {
+    int numberOfComputerPlayers;
+    int humanPlayerSelection;
+
+    //user inputs how many computer players will be playing, between 2 and 5
+    cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
+    while (1) {
+        numberOfComputerPlayers = getIntFromConsole();
+        if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
+            break;
+        }
+        else {
+            cout << "Not a valid number. Please enter a number between 2 and 5." << endl;
+        }
+    }
     //creates the board
     Board* clueBoard = new Board;
     //creates empty vector of player pointers
     vector<Player*> players;
-    //    //user selects his/her character type from list of character type enumeration
-    //    cout << "Which character would you like to be (enter player number): " << endl;
-    //    for (int i = 0; i < NUM_CHARACTERS; i++) {
-    //        cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
-    //    }
-    //    //user's character is added to players vector
-    //    while(1) {
-    //        humanPlayerSelection = getIntFromConsole(); //this method ensures no bad entries (ie chars) from console
-    //        if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_CHARACTERS) {
-    //            CharacterType selectedType = (CharacterType)humanPlayerSelection;
-    //            Player* player = new HumanPlayer(selectedType);
-    //            players.push_back(player);
-    //            break;
-    //        }
-    //        else {
-    //            cout << "Not a valid number. Please enter a valid character number." << endl;
-    //        }
-    //    }
-    //    cout << "You chose " << players[0]->name << endl;
+        //user selects his/her character type from list of character type enumeration
+        cout << "Which character would you like to be (enter player number): " << endl;
+        for (int i = 0; i < NUM_CHARACTERS; i++) {
+            cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
+        }
+        //user's character is added to players vector
+        while(1) {
+            humanPlayerSelection = getIntFromConsole(); //this method ensures no bad entries (ie chars) from console
+            if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_CHARACTERS) {
+                CharacterType selectedType = (CharacterType)humanPlayerSelection;
+                Player* player = new HumanPlayer(selectedType);
+                players.push_back(player);
+                break;
+            }
+            else {
+                cout << "Not a valid number. Please enter a valid character number." << endl;
+            }
+        }
+        cout << "You chose " << players[0]->name << endl;
     //all remaining character types are added to a temporary vector
     vector<int> charactersLeftToPick;
     for (int i = 0; i < NUM_CHARACTERS; i ++) {
-//        if (i != humanPlayerSelection) {
+        if (i != humanPlayerSelection) {
             charactersLeftToPick.push_back(i);
-//        }
+        }
     }
     //temporary vector is shuffled
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -114,8 +135,8 @@ int playGame(int numberOfComputerPlayers) {
             if (accusation != NULL) {
                 //if correct, player wins
                 if (confidential->checkAccusation(*accusation)) {
-                    cout << players[i]->name << " has correctly identified the killer. They win!" << endl;
-                    cout << "It only took them......." << turns << "!!!!"<<endl;
+                    cout << players[i]->name << " has correctly identified the killer. " << players[i]->name << " wins!" << endl;
+                    cout << "This game took " << turns << " turns to complete!"<<endl;
                 }
                 //if incorrect, player loses and game ends
                 else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
@@ -144,7 +165,15 @@ int playGame(int numberOfComputerPlayers) {
             }
             //player's turn ends, informs user what room they ended up in
             cout << players[i]->name << "'s turn has ended. " << players
-            [i]->name << " is in the " << players[i]->playerLocation->name << endl;
+            [i]->name << " is in the " << players[i]->playerLocation->name << endl << endl;
+            cout << "Please press 1 to continue to the next player's turn." << endl;
+            while(1){
+                int moveOn = getIntFromConsole();
+                if (moveOn == 1) {
+                    break;
+                }
+                else cout << "Invalid entry, please press 1 to continue." << endl;
+            }
         }
         turns++;
     }
@@ -155,35 +184,6 @@ int playGame(int numberOfComputerPlayers) {
     
     delete clueBoard;
     delete confidential;
-    return turns;
-    
-}
 
-
-int main(int argc, const char * argv[]) {
-    int numberOfComputerPlayers;
-    int humanPlayerSelection;
-
-    //user inputs how many computer players will be playing, between 2 and 5
-    cout << "Welcome to Clue! First, select how many computer players you will be playing against (2-5)" << endl;
-    while (1) {
-        numberOfComputerPlayers = getIntFromConsole();
-        if (numberOfComputerPlayers >= 2 && numberOfComputerPlayers <= 5){
-            break;
-        }
-        else {
-            cout << "Not a valid number. Please enter a number between 2 and 5." << endl;
-        }
-    }
-    
-    int numberOfGames = 1000;
-    int turns = 0;
-    while (numberOfGames > 0) {
-        turns += playGame(numberOfComputerPlayers);
-        numberOfGames--;
-    }
-    
-    cout << "They played 1000 games with an average of " << turns / 1000 << " per game" << endl;
-    
     return 0;
 }
