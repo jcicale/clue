@@ -29,8 +29,8 @@ public:
 
 class SuspectCard : public Card {
 public:
-    CharacterType characterType;
-    SuspectCard(CharacterType type);
+    SuspectType suspectType;
+    SuspectCard(SuspectType type);
 };
 
 class LocationCard : public Card {
@@ -49,7 +49,7 @@ inline void printCards(vector<Card*> cards) {
         }
         else if (card->type == Suspect) {
             SuspectCard* suspect = (SuspectCard*)card;
-            cout <<"Suspect card: " << getCharacterTypeString(suspect->characterType)  << endl;
+            cout <<"Suspect card: " << getSuspectTypeString(suspect->suspectType)  << endl;
         }
         else if (card->type == Location) {
             LocationCard* location = (LocationCard*)card;

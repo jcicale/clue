@@ -10,7 +10,7 @@
 
 //CONSTRUCTOR
 //envelope consists of one Type Collection that includes one card of each type
-Envelope::Envelope(WeaponType weaponUsed, CharacterType suspectUsed, LocationType locationUsed) {
+Envelope::Envelope(WeaponType weaponUsed, SuspectType suspectUsed, LocationType locationUsed) {
     envelopeCards.weaponUsed = weaponUsed;
     envelopeCards.suspectUsed = suspectUsed;
     envelopeCards.locationUsed = locationUsed;
@@ -26,6 +26,6 @@ bool Envelope::checkAccusation(TypeCollection accusation) {
 //method to print the cards in the envelope
 void Envelope::debugPrintEnvelope() {
     cout << "The weapon card in the envelope is the " << getWeaponTypeString(envelopeCards.weaponUsed) << endl;
-    cout << "The suspect card in the envelope is " << getCharacterTypeString(envelopeCards.suspectUsed) << endl;
+    cout << "The suspect card in the envelope is " << getSuspectTypeString(envelopeCards.suspectUsed) << endl;
     cout << "The location card in the envelope is the " << getLocationTypeString(envelopeCards.locationUsed) << endl;
 }

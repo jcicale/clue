@@ -12,16 +12,16 @@
 
 //Player implementation
 //constructor
-Player::Player(CharacterType type) {
-    name = getCharacterTypeString(type);
+Player::Player(SuspectType type) {
+    name = getSuspectTypeString(type);
     identity = type;
-    //creates each player's lists of weapons/characters/locations to cross off
+    //creates each player's lists of weapons/suspects/locations to cross off
     for (int i = 0; i < NUM_WEAPONS; i++) {
         WeaponCard* card = new WeaponCard((WeaponType)i);
         weaponsList.push_back(card);
     }
-    for (int i = 0; i < NUM_CHARACTERS; i++) {
-        SuspectCard* card = new SuspectCard((CharacterType)i);
+    for (int i = 0; i < NUM_SUSPECTS; i++) {
+        SuspectCard* card = new SuspectCard((SuspectType)i);
         suspectsList.push_back(card);
     }
     for (int i = 0; i < NUM_LOCATIONS; i++) {
@@ -29,6 +29,7 @@ Player::Player(CharacterType type) {
         locationsList.push_back(card);
     }
 }
+//destructor
 Player::~Player() {
     for (int i = 0; i < locationsList.size(); i++) {
         delete locationsList[i];
@@ -64,9 +65,9 @@ void Player::suggestionDisproved(Player* player, Card* disprovingCard) {
 
 //HumanPlayer subclass implementation
 //CONSTRUCTOR
-HumanPlayer::HumanPlayer(CharacterType type) : Player(type) {}
+HumanPlayer::HumanPlayer(SuspectType type) : Player(type) {}
 //METHODS
-//user is allowed to select which room to start in (each character type can start in one of two rooms)
+//user is allowed to select which room to start in (each suspect type can start in one of two rooms)
 void HumanPlayer::chooseStartingLocation(Board* board) {
     StartingLocations startingLocations = getStartingLocations(identity);
     cout << "\n" << name << " can start in the " << endl;
@@ -94,7 +95,7 @@ void HumanPlayer::printOutCards() {
         cout << i+1 << ". " << playersCards[i]->name << endl;
     }
 }
-//leaving blank for now as CP lists are more important
+//human player will keep his/her own list as part of the game
 void HumanPlayer::removePlayersCardsFromList() {}
 //method to move the HumanPlayer around the board; movement is based on connected rooms (each room has either two or three connected rooms to move to). This method updates the playerLocation property.
 void HumanPlayer::move(){
@@ -134,11 +135,11 @@ TypeCollection* HumanPlayer::makeAccusation() {
                 cout << i << ". " << getWeaponTypeString((WeaponType)i) << endl;
             }
             playersAccusation->weaponUsed = (WeaponType)getIntFromConsole();
-            cout << "Which character would you like to select?" << endl;
-            for (int i = 0; i < NUM_CHARACTERS; i++) {
-                cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
+            cout << "Which suspect would you like to select?" << endl;
+            for (int i = 0; i < NUM_SUSPECTS; i++) {
+                cout << i << ". " << getSuspectTypeString((SuspectType)i) << endl;
             }
-            CharacterType test = (CharacterType)getIntFromConsole();
+            SuspectType test = (SuspectType)getIntFromConsole();
             playersAccusation->suspectUsed = test;
             cout << "Which room would you like to select?" << endl;
             for (int i = 0; i < NUM_LOCATIONS; i++) {
@@ -168,11 +169,11 @@ TypeCollection* HumanPlayer::makeSuggestion() {
                 cout << i << ". " << getWeaponTypeString((WeaponType)i) << endl;
             }
             playersSuggestion->weaponUsed = (WeaponType)getIntFromConsole();
-            cout << "Which character would you like to select?" << endl;
-            for (int i = 0; i < NUM_CHARACTERS; i++) {
-                cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
+            cout << "Which suspect would you like to select?" << endl;
+            for (int i = 0; i < NUM_SUSPECTS; i++) {
+                cout << i << ". " << getSuspectTypeString((SuspectType)i) << endl;
             }
-            playersSuggestion->suspectUsed = (CharacterType)getIntFromConsole();;
+            playersSuggestion->suspectUsed = (SuspectType)getIntFromConsole();;
             playersSuggestion->locationUsed = playerLocation->identity;
             return playersSuggestion;
         }
@@ -192,7 +193,7 @@ Card* HumanPlayer::disproveSuggestion(TypeCollection suggestion, Player* current
         }
         if (playersCards[x]->type == Suspect) {
             SuspectCard* currentSuspectCard = (SuspectCard*)currentCard;
-            if (currentSuspectCard->characterType == suggestion.suspectUsed) {
+            if (currentSuspectCard->suspectType == suggestion.suspectUsed) {
                 cardsThatDisprove.push_back(currentSuspectCard);
             }
         }
@@ -240,9 +241,9 @@ void HumanPlayer::cheat(Envelope* envelope) {}
 
 //ComputerPlayer subclass implementation
 //CONSTRUCTOR
-ComputerPlayer::ComputerPlayer(CharacterType type) : Player(type) {}
+ComputerPlayer::ComputerPlayer(SuspectType type) : Player(type) {}
 //METHODS
-//ComputerPlayer selects which room to start in by picking a random number, one of two(each character type can start in one of two rooms)
+//ComputerPlayer selects which room to start in by picking a random number, one of two(each suspect type can start in one of two rooms)
 void ComputerPlayer::chooseStartingLocation(Board* board) {
     StartingLocations startingLocations = getStartingLocations(identity);
     int selectedLocation = getRandomNumber(1);
@@ -277,7 +278,7 @@ void ComputerPlayer::removePlayersCardsFromList(){
             SuspectCard* currentSuspectCard = (SuspectCard*)currentCard;
             for (int j = 0; j < suspectsList.size(); j++) {
                 SuspectCard* cardToCompare = suspectsList[j];
-                if (currentSuspectCard->characterType == cardToCompare->characterType) {
+                if (currentSuspectCard->suspectType == cardToCompare->suspectType) {
                     suspectsList.erase(suspectsList.begin()+j);
                 }
             }
@@ -319,10 +320,10 @@ TypeCollection* ComputerPlayer::makeAccusation() {
     if (weaponsList.size() == 1 && suspectsList.size() == 1 && locationsList.size() == 1) {
         TypeCollection *accusation = new TypeCollection;
         accusation->weaponUsed = weaponsList[0]->weaponType;
-        accusation->suspectUsed = suspectsList[0]->characterType;
+        accusation->suspectUsed = suspectsList[0]->suspectType;
         accusation->locationUsed = locationsList[0]->locationType;
         
-        cout << name << " has accused " << getCharacterTypeString(accusation->suspectUsed) <<
+        cout << name << " has accused " << getSuspectTypeString(accusation->suspectUsed) <<
         " of commiting the murder in the " << getLocationTypeString(accusation->locationUsed) <<
         " with the " << getWeaponTypeString(accusation->weaponUsed) << endl;
         
@@ -336,10 +337,10 @@ TypeCollection* ComputerPlayer::makeSuggestion() {
     TypeCollection* computerSuggestion = new TypeCollection;
     int randomWeapon = getRandomNumber(weaponsList.size()-1);
     computerSuggestion->weaponUsed = weaponsList[randomWeapon]->weaponType;
-    int randomCharacter = getRandomNumber(suspectsList.size()-1);
-    computerSuggestion->suspectUsed = suspectsList[randomCharacter]->characterType;
+    int randomSuspect = getRandomNumber(suspectsList.size()-1);
+    computerSuggestion->suspectUsed = suspectsList[randomSuspect]->suspectType;
     computerSuggestion->locationUsed = playerLocation->identity;
-    cout << name << " has suggested the killer was " << getCharacterTypeString(computerSuggestion->suspectUsed) <<  " in the "<< getLocationTypeString(computerSuggestion->locationUsed) << " with the " << getWeaponTypeString(computerSuggestion->weaponUsed) << "." << endl;
+    cout << name << " has suggested the killer was " << getSuspectTypeString(computerSuggestion->suspectUsed) <<  " in the "<< getLocationTypeString(computerSuggestion->locationUsed) << " with the " << getWeaponTypeString(computerSuggestion->weaponUsed) << "." << endl;
     return computerSuggestion;
 }
 //method to check if any of the ComputerPlayer's cards can disprove someone's suggestion; if yes returns the first card found that disproves it. If no, returns NULL
@@ -352,7 +353,7 @@ Card* ComputerPlayer::disproveSuggestion(TypeCollection suggestion, Player* curr
         }
         if (card->type == Suspect) {
             SuspectCard *suspectCard = (SuspectCard *)card;
-            if (suspectCard->characterType == suggestion.suspectUsed) return suspectCard;
+            if (suspectCard->suspectType == suggestion.suspectUsed) return suspectCard;
         }
         if (card->type == Location) {
             LocationCard *locationCard = (LocationCard*)card;
@@ -374,7 +375,7 @@ void ComputerPlayer::suggestionDisproved(Player* player, Card* disprovingCard) {
     } else if (disprovingCard->type == Suspect) {
         SuspectCard* disprovingSuspectCard = (SuspectCard*)disprovingCard;
         for(int i=0; i<suspectsList.size(); i++) {
-            if(disprovingSuspectCard->characterType == suspectsList[i]->characterType) {
+            if(disprovingSuspectCard->suspectType == suspectsList[i]->suspectType) {
                 suspectsList.erase(suspectsList.begin()+i);
             }
         }

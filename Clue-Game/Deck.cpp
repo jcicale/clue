@@ -40,8 +40,8 @@ void WeaponDeck::printWeaponDeck(){
 //CONSTRUCTOR
 //constructs and shuffles the SuspectDeck
 SuspectDeck::SuspectDeck() {
-    for(int i = 0; i<NUM_CHARACTERS; i++){
-        SuspectCard* card = new SuspectCard((CharacterType)i);
+    for(int i = 0; i<NUM_SUSPECTS; i++){
+        SuspectCard* card = new SuspectCard((SuspectType)i);
         suspectCards.push_back(card);
     }
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -60,7 +60,7 @@ void SuspectDeck::printSuspectDeck(){
         Card* card = suspectCards[i];
         if (card->type == Suspect) {
             SuspectCard* suspect = (SuspectCard*)card;
-            cout <<"We have a suspect card: " << getCharacterTypeString(suspect->characterType)  << endl;
+            cout <<"We have a suspect card: " << getSuspectTypeString(suspect->suspectType)  << endl;
         }
     }
 }

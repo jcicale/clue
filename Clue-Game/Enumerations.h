@@ -49,10 +49,10 @@ inline string getWeaponTypeString(WeaponType type) {
     }
 }
 
-//constant number of characters
-#define NUM_CHARACTERS 6
-//enumeration for the six types of characters
-enum CharacterType {
+//constant number of suspects
+#define NUM_SUSPECTS 6
+//enumeration for the six types of suspects
+enum SuspectType {
     Scarlet,
     Mustard,
     White,
@@ -60,8 +60,8 @@ enum CharacterType {
     Peacock,
     Plum
 };
-//function used to access a string corresponding to each character type
-inline string getCharacterTypeString(CharacterType type) {
+//function used to access a string corresponding to each suspect type
+inline string getSuspectTypeString(SuspectType type) {
     switch (type) {
         case Scarlet:
             return "Miss Scarlet";
@@ -121,10 +121,10 @@ struct StartingLocations {
     LocationType choiceOne;
     LocationType choiceTwo;
 };
-//function that assigns starting locations based on CharacterType enumeration
-inline StartingLocations getStartingLocations(CharacterType character) {
+//function that assigns starting locations based on SuspectType enumeration
+inline StartingLocations getStartingLocations(SuspectType suspect) {
     StartingLocations startingLocations;
-    switch (character) {
+    switch (suspect) {
         case Scarlet:
             startingLocations.choiceOne = Hall;
             startingLocations.choiceTwo = Lounge;
@@ -157,7 +157,7 @@ inline StartingLocations getStartingLocations(CharacterType character) {
 //these are the three Card Types that will go in the killer envelope
 struct TypeCollection {
     WeaponType weaponUsed;
-    CharacterType suspectUsed;
+    SuspectType suspectUsed;
     LocationType locationUsed;
 };
 

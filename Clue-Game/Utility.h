@@ -10,7 +10,7 @@
 #define Utility_h
 
 #include <random>
-//function to handle user entering a non-numeric character
+//function to handle user entering a non-numeric suspect
 inline int getIntFromConsole() {
     int input;
     bool badEntry = false;

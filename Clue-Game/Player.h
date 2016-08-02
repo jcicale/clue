@@ -20,10 +20,10 @@
 class Player {
 public:
     string name;
-    CharacterType identity;
+    SuspectType identity;
     Room* playerLocation;
     vector<Card*> playersCards;
-    Player(CharacterType type);
+    Player(SuspectType type);
     ~Player();
     vector<WeaponCard*> weaponsList;
     vector<SuspectCard*> suspectsList;
@@ -42,7 +42,7 @@ public:
 
 class HumanPlayer : public Player {
 public:
-    HumanPlayer(CharacterType type);
+    HumanPlayer(SuspectType type);
     void chooseStartingLocation(Board* board);
     void printOutCards();
     void removePlayersCardsFromList();
@@ -56,7 +56,7 @@ public:
 
 class ComputerPlayer : public Player {
 public:
-    ComputerPlayer(CharacterType type);
+    ComputerPlayer(SuspectType type);
     void chooseStartingLocation(Board* board);
     void printOutCards();
     void removePlayersCardsFromList();
@@ -76,7 +76,7 @@ inline bool isOrderedBefore(Player* playerOne, Player* playerTwo) {
     else return false;
 }
 
-inline Player* findPlayerWithIdentity(vector<Player*> players, CharacterType identity) {
+inline Player* findPlayerWithIdentity(vector<Player*> players, SuspectType identity) {
     for (int i = 0; i < players.size(); i++) {
         if (players[i]->identity == identity) return players[i];
     }

@@ -21,9 +21,9 @@ WeaponCard::WeaponCard(WeaponType type) : Card(Weapon) {
 }
 //SuspectCard Subclass Implementation
 //CONSTRUCTOR
-SuspectCard::SuspectCard(CharacterType type) : Card(Suspect) {
-    characterType = type;
-    name = getCharacterTypeString(type);
+SuspectCard::SuspectCard(SuspectType type) : Card(Suspect) {
+    suspectType = type;
+    name = getSuspectTypeString(type);
 }
 //LocationCard Subclass Implementation
 //CONSTRUCTOR

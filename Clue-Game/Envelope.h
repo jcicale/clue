@@ -17,7 +17,7 @@ class Envelope{
 public:
     TypeCollection envelopeCards;
     
-    Envelope(WeaponType weaponUsed, CharacterType suspectUsed, LocationType locationUsed);
+    Envelope(WeaponType weaponUsed, SuspectType suspectUsed, LocationType locationUsed);
     bool checkAccusation(TypeCollection accusation);
     
     void debugPrintEnvelope();

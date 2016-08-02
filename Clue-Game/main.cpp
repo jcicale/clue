@@ -27,9 +27,8 @@ int main(int argc, const char * argv[]) {
     int numberOfComputerPlayers;
     int humanPlayerSelection;
 
-    //user inputs how many computer players will be playing, between 2 and 5
+    //introductory text
     cout << "Welcome to Clue!" << endl;
-    
     cout << "\nHere is a list of all of the Weapons, Suspects, and Locations in the game. You may want to copy them for future reference:" << endl;
     
     cout << "\nWeapons: " << endl;
@@ -38,15 +37,15 @@ int main(int argc, const char * argv[]) {
     }
     
     cout << "\nSuspects: " << endl;
-    for(int i=0; i<NUM_CHARACTERS; i++){
-        cout << "\t" << getCharacterTypeString((CharacterType)i) << endl;
+    for(int i=0; i<NUM_SUSPECTS; i++){
+        cout << "\t" << getSuspectTypeString((SuspectType)i) << endl;
     }
     
     cout << "\nLocations: " << endl;
     for(int i=0; i<NUM_LOCATIONS; i++){
         cout << "\t" << getLocationTypeString((LocationType)i) << endl;
     }
-    
+    //user inputs how many computer players will be playing, between 2 and 5
     cout << "\nFirst, select how many computer players you will be playing against (2-5):" << endl;
     
     while (1) {
@@ -62,41 +61,42 @@ int main(int argc, const char * argv[]) {
     Board* clueBoard = new Board;
     //creates empty vector of player pointers
     vector<Player*> players;
-        //user selects his/her character type from list of character type enumeration
-        cout << "\nWhich character would you like to be (enter player number): " << endl;
-        for (int i = 0; i < NUM_CHARACTERS; i++) {
-            cout << i << ". " << getCharacterTypeString((CharacterType)i) << endl;
+        //user selects his/her suspect type from list of suspect type enumeration
+        cout << "\nWhich suspect would you like to be (enter player number): " << endl;
+        for (int i = 0; i < NUM_SUSPECTS; i++) {
+            cout << i << ". " << getSuspectTypeString((SuspectType)i) << endl;
         }
-        //user's character is added to players vector
+        //user's suspect is added to players vector
         while(1) {
-            humanPlayerSelection = getIntFromConsole(); //this method ensures no bad entries (ie chars) from console
-            if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_CHARACTERS) {
-                CharacterType selectedType = (CharacterType)humanPlayerSelection;
+            //ensuring that the input is valid
+            humanPlayerSelection = getIntFromConsole();
+            if (humanPlayerSelection >= 0 && humanPlayerSelection < NUM_SUSPECTS) {
+                SuspectType selectedType = (SuspectType)humanPlayerSelection;
                 Player* player = new HumanPlayer(selectedType);
                 players.push_back(player);
                 break;
             }
             else {
-                cout << "Not a valid number. Please enter a valid character number." << endl;
+                cout << "Not a valid number. Please enter a valid suspect number." << endl;
             }
         }
         cout << "\nYou chose " << players[0]->name << endl;
-    //all remaining character types are added to a temporary vector
-    vector<int> charactersLeftToPick;
-    for (int i = 0; i < NUM_CHARACTERS; i ++) {
+    //all remaining suspect types are added to a temporary vector
+    vector<int> suspectsLeftToPick;
+    for (int i = 0; i < NUM_SUSPECTS; i ++) {
         if (i != humanPlayerSelection) {
-            charactersLeftToPick.push_back(i);
+            suspectsLeftToPick.push_back(i);
         }
     }
     //temporary vector is shuffled
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
-    shuffle(charactersLeftToPick.begin(), charactersLeftToPick.end(), default_random_engine((unsigned)seed));
+    shuffle(suspectsLeftToPick.begin(), suspectsLeftToPick.end(), default_random_engine((unsigned)seed));
     //computer players created by pushing that number of elements onto players and popping them from the temp vector
     for (int i = 0; i < numberOfComputerPlayers; i++) {
-        CharacterType computerType = (CharacterType)charactersLeftToPick.back();
+        SuspectType computerType = (SuspectType)suspectsLeftToPick.back();
         Player* player = new ComputerPlayer(computerType);
         players.push_back(player);
-        charactersLeftToPick.pop_back();
+        suspectsLeftToPick.pop_back();
     }
     //puts the players vector back in playing order
     sort(players.begin(), players.end(), isOrderedBefore);
@@ -113,7 +113,7 @@ int main(int argc, const char * argv[]) {
     LocationDeck locationDeck;
     //pulls a random card from each
     WeaponType weaponUsed = weaponDeck.getRandomCard()->weaponType;
-    CharacterType suspectUsed = suspectDeck.getRandomCard()->characterType;
+    SuspectType suspectUsed = suspectDeck.getRandomCard()->suspectType;
     LocationType locationUsed = locationDeck.getRandomCard()->locationType;
     //creates the Envelope with the three killer cards
     Envelope *confidential = new Envelope(weaponUsed, suspectUsed, locationUsed);
@@ -153,16 +153,16 @@ int main(int argc, const char * argv[]) {
                     cout << "This game took " << turns << " turns to complete!"<<endl;
                 }
                 //if incorrect, player loses and game ends
-                else cout << "Your accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
+                else cout << "Your accusation was incorrect. The correct answer was "<< getSuspectTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
                 gameWon = true;
                 break;
             }
-            //player then moves to another room
+            //if no accusation, player moves to another room
             players[i]->move();
             //player can make a suggestion or not
             TypeCollection* suggestion = players[i]->makeSuggestion();
             if (suggestion != NULL) {
-                //if a suggestion is made, move the suggested character to the suggested room
+                //if a suggestion is made, move the suggested suspect to the suggested room
                 Player* suggestedPlayer = findPlayerWithIdentity(players, suggestion->suspectUsed);
                 clueBoard->movePlayerToRoom(suggestedPlayer, suggestion->locationUsed);
                 //if a suggestion is made, iterate through players starting with player AFTER current player
@@ -177,7 +177,7 @@ int main(int argc, const char * argv[]) {
                         break;
                     }
                 }
-                //if no one can disprove current player, they have the option to make an accusation
+                //if no one can disprove current player, player has the option to make an accusation
                 if (disproved == false) {
                     cout << "\n" << players[i]->name <<"'s suggestion has not been disproved. " << players[i]->name << " has the chance to make an accusation." << endl;
                     accusation = players[i]->makeAccusation();
@@ -188,7 +188,7 @@ int main(int argc, const char * argv[]) {
                             cout << "This game took " << turns << " turns to complete!"<<endl;
                         }
                         //if incorrect, player loses and game ends
-                        else cout << "\nYour accusation was incorrect. The correct answer was "<< getCharacterTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
+                        else cout << "\nThat accusation was incorrect. The correct answer was "<< getSuspectTypeString(confidential->envelopeCards.suspectUsed) << " in the " << getLocationTypeString(confidential->envelopeCards.locationUsed) << " with the " << getWeaponTypeString(confidential->envelopeCards.weaponUsed)  <<  ". Game over!" << endl;
                         gameWon = true;
                         break;
                     }
@@ -200,6 +200,7 @@ int main(int argc, const char * argv[]) {
             //player's turn ends, informs user what room they ended up in
             cout << players[i]->name << "'s turn has ended. " << players
             [i]->name << " is in the " << players[i]->playerLocation->name << endl << endl;
+            //button push to go to next player
             cout << "Please press 1 to continue to the next player's turn." << endl;
             while(1){
                 int moveOn = getIntFromConsole();
@@ -209,9 +210,11 @@ int main(int argc, const char * argv[]) {
                 else cout << "Invalid entry, please press 1 to continue." << endl;
             }
         }
+        //increment turns counter
         turns++;
     }
     
+    //cleaning up dynamically allocated memory
     for (int i = 0; i < players.size(); i++) {
         delete players[i];
     }

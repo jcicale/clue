@@ -13,6 +13,7 @@
 #include "Card.h"
 #include "Player.h"
 
+//type deck
 class WeaponDeck {
 public:
     vector<WeaponCard*> weaponCards;
@@ -24,6 +25,7 @@ public:
     
 };
 
+//type deck
 class SuspectDeck {
 public:
     vector<SuspectCard*> suspectCards;
@@ -34,6 +36,7 @@ public:
     void printSuspectDeck();
 };
 
+//type deck
 class LocationDeck {
 public:
     vector<LocationCard*> locationCards;
@@ -43,6 +46,7 @@ public:
     void printLocationDeck();
 };
 
+//full deck
 class Deck {
 public:
     vector<Card*> cards;
