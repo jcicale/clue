@@ -388,7 +388,7 @@ void ComputerPlayer::suggestionDisproved(Player* player, Card* disprovingCard) {
         }
     }
 }
-
+//to give Computer Players a chance to win, this method potentially gives them one of the three killer cards to start out (or no advantage, depending on what number is rolled)
 void ComputerPlayer::cheat(Envelope* envelope) {
 
     int randomNumber = getRandomNumber(3);
