@@ -57,7 +57,7 @@
 		1. Rather than use dice to move about the board, you may directly enter any room that is adjacent to the room you are in
 		2. At start, characters may enter only rooms they start near (denoted in image by color)
 
-		![Clue Game Board](Clue-Board.png "Clue Board Layout")
+		![Clue Game Board](https://bitbucket.org/cluegamecomp271msaenz/clue/src/28d6780ac070d6f236a9012f4f991b78860dbb92/Clue-Board.png?at=master "Clue Board Layout")
 
 		3. To begin, Player will enter the name of the room he/she chooses
 			a. If a valid choice, Player moves to that room
