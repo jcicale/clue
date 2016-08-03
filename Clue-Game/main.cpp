@@ -27,7 +27,6 @@ int main(int argc, const char * argv[]) {
     int numberOfComputerPlayers;
     int humanPlayerSelection;
 
-    //introductory text
     cout << "Welcome to Clue!" << endl;
     cout << "\nHere is a list of all of the Weapons, Suspects, and Locations in the game. You may want to copy them for future reference:" << endl;
     
@@ -91,7 +90,7 @@ int main(int argc, const char * argv[]) {
     //temporary vector is shuffled
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(suspectsLeftToPick.begin(), suspectsLeftToPick.end(), default_random_engine((unsigned)seed));
-    //computer players created by pushing that number of elements onto players and popping them from the temp vector
+    //computer players created 
     for (int i = 0; i < numberOfComputerPlayers; i++) {
         SuspectType computerType = (SuspectType)suspectsLeftToPick.back();
         Player* player = new ComputerPlayer(computerType);
